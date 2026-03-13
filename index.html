@@ -1,165 +1,492 @@
-<script>
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn = document.getElementById("noBtn");
-  const successMsg = document.getElementById("successMsg");
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+  />
+  <title>❤️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  // YES 버튼 클릭
-  if (yesBtn && successMsg) {
-    yesBtn.addEventListener("click", () => {
-      successMsg.classList.add("show");
-      yesBtn.textContent = "💖 YES 💖";
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      background: #fff7fa;
+      color: #111;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      position: relative;
+    }
+
+    .name {
+      font-size: clamp(28px, 8vw, 42px);
+      font-weight: 700;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .love {
+      font-size: clamp(24px, 6.5vw, 34px);
+      font-weight: 600;
+      margin-bottom: 16px;
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+    }
+
+    .love .heart {
+      display: inline-block;
+      margin-left: 6px;
+      animation: beat 1.2s infinite;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+
+    .question {
+      font-size: clamp(30px, 9vw, 48px);
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      margin-bottom: 60px;
+    }
+
+    .buttons-area {
+      position: relative;
+      width: 100%;
+      height: 180px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 16px 30px;
+      min-width: 140px;
+      min-height: 58px;
+      font-size: clamp(18px, 5vw, 22px);
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      touch-action: manipulation;
+      white-space: nowrap;
+    }
+
+    #yesBtn {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-120%, -50%);
+      background: #111;
+      color: #fff;
+    }
+
+    #noBtn {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(20%, -50%);
+      background: #fff;
+      color: #111;
+      border: 1.5px solid #ddd;
+    }
+
+    #result {
+      margin-top: 12px;
+      min-height: 40px;
+      font-size: clamp(22px, 6vw, 28px);
+      font-weight: 700;
+      color: #e11d48;
+    }
+
+    .confetti {
+      position: fixed;
+      top: -20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: fall linear forwards;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0.15;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .buttons-area {
+        height: 200px;
+      }
+
+      .btn {
+        min-width: 128px;
+        min-height: 56px;
+      }
+
+      #yesBtn {
+        transform: translate(-110%, -50%);
+      }
+
+      #noBtn {
+        transform: translate(10%, -50%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="name">지혜야</div>
+    <div class="love">
+      많이 많이 사랑해 <span class="heart">❤️</span>
+    </div>
+    <div class="question">나랑 결혼 해 줄래?</div>
+
+    <div class="buttons-area" id="playground">
+      <button class="btn" id="yesBtn">YES</button>
+      <button class="btn" id="noBtn">NO</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const result = document.getElementById("result");
+    const playground = document.getElementById("playground");
+
+    let finished = false;
+    let isFloating = false;
+    let noX = 0;
+    let noY = 0;
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function getYesRectInArea() {
+      const areaRect = playground.getBoundingClientRect();
+      const yesRect = yesBtn.getBoundingClientRect();
+
+      return {
+        left: yesRect.left - areaRect.left,
+        top: yesRect.top - areaRect.top,
+        right: yesRect.right - areaRect.left,
+        bottom: yesRect.bottom - areaRect.top,
+        width: yesRect.width,
+        height: yesRect.height
+      };
+    }
+
+    function getNoRectInArea() {
+      const areaRect = playground.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+
+      return {
+        left: noRect.left - areaRect.left,
+        top: noRect.top - areaRect.top,
+        right: noRect.right - areaRect.left,
+        bottom: noRect.bottom - areaRect.top,
+        width: noRect.width,
+        height: noRect.height
+      };
+    }
+
+    function ensureFloating() {
+      if (isFloating) return;
+
+      const current = getNoRectInArea();
+      noX = current.left;
+      noY = current.top;
+
+      noBtn.style.left = noX + "px";
+      noBtn.style.top = noY + "px";
+      noBtn.style.transform = "none";
+      noBtn.style.transition = "left 0.08s ease-out, top 0.08s ease-out, transform 0.08s ease-out";
+
+      isFloating = true;
+    }
+
+    function overlapsYes(x, y, noW, noH, gap = 24) {
+      const yes = getYesRectInArea();
+
+      const noLeft = x;
+      const noTop = y;
+      const noRight = x + noW;
+      const noBottom = y + noH;
+
+      return !(
+        noRight < yes.left - gap ||
+        noLeft > yes.right + gap ||
+        noBottom < yes.top - gap ||
+        noTop > yes.bottom + gap
+      );
+    }
+
+    function setNoPosition(x, y) {
+      const areaRect = playground.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+
+      const margin = 8;
+      const maxX = areaRect.width - noRect.width - margin;
+      const maxY = areaRect.height - noRect.height - margin;
+
+      x = clamp(x, margin, maxX);
+      y = clamp(y, margin, maxY);
+
+      // YES 버튼 겹침 방지
+      if (overlapsYes(x, y, noRect.width, noRect.height, 24)) {
+        let found = false;
+
+        for (let i = 0; i < 24; i++) {
+          const rx = random(margin, maxX);
+          const ry = random(margin, maxY);
+
+          if (!overlapsYes(rx, ry, noRect.width, noRect.height, 24)) {
+            x = rx;
+            y = ry;
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          // 가장자리 쪽으로 밀어냄
+          if (x < areaRect.width / 2) {
+            x = margin;
+          } else {
+            x = maxX;
+          }
+
+          if (y < areaRect.height / 2) {
+            y = margin;
+          } else {
+            y = maxY;
+          }
+
+          x = clamp(x, margin, maxX);
+          y = clamp(y, margin, maxY);
+        }
+      }
+
+      noX = x;
+      noY = y;
+
+      noBtn.style.left = noX + "px";
+      noBtn.style.top = noY + "px";
+    }
+
+    function moveNoButtonFromPointer(pointerClientX, pointerClientY, forceJump = false) {
+      if (finished) return;
+
+      ensureFloating();
+
+      const areaRect = playground.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+
+      const pointerX = pointerClientX - areaRect.left;
+      const pointerY = pointerClientY - areaRect.top;
+
+      const centerX = noX + noRect.width / 2;
+      const centerY = noY + noRect.height / 2;
+
+      let dx = centerX - pointerX;
+      let dy = centerY - pointerY;
+
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) {
+        dx = Math.random() > 0.5 ? 1 : -1;
+        dy = Math.random() > 0.5 ? 1 : -1;
+      }
+
+      const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+      const nx = dx / distance;
+      const ny = dy / distance;
+
+      // 더 휙휙 도망가게
+      const jumpDistance = forceJump
+        ? Math.max(110, Math.min(170, areaRect.width * 0.42))
+        : Math.max(70, Math.min(120, areaRect.width * 0.28));
+
+      let targetX = noX + nx * jumpDistance;
+      let targetY = noY + ny * jumpDistance;
+
+      setNoPosition(targetX, targetY);
+
+      noBtn.style.transform = "scale(1.05)";
+      clearTimeout(noBtn._scaleTimer);
+      noBtn._scaleTimer = setTimeout(() => {
+        noBtn.style.transform = "scale(1)";
+      }, 70);
+    }
+
+    function keepDistanceFromPointer(pointerClientX, pointerClientY) {
+      if (finished) return;
+
+      ensureFloating();
+
+      const areaRect = playground.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+
+      const pointerX = pointerClientX - areaRect.left;
+      const pointerY = pointerClientY - areaRect.top;
+
+      const centerX = noX + noRect.width / 2;
+      const centerY = noY + noRect.height / 2;
+
+      let dx = centerX - pointerX;
+      let dy = centerY - pointerY;
+
+      const currentDistance = Math.sqrt(dx * dx + dy * dy) || 1;
+
+      // 손가락과 항상 일정 거리 유지
+      const safeDistance = Math.max(95, Math.min(130, areaRect.width * 0.30));
+
+      if (currentDistance >= safeDistance) return;
+
+      let nx = dx / currentDistance;
+      let ny = dy / currentDistance;
+
+      if (!isFinite(nx) || !isFinite(ny)) {
+        nx = Math.random() > 0.5 ? 1 : -1;
+        ny = Math.random() > 0.5 ? 1 : -1;
+      }
+
+      const push = safeDistance - currentDistance + 24;
+
+      let targetX = noX + nx * push;
+      let targetY = noY + ny * push;
+
+      setNoPosition(targetX, targetY);
+    }
+
+    function pointerNearNo(pointerClientX, pointerClientY, extra = 110) {
+      const rect = noBtn.getBoundingClientRect();
+
+      return (
+        pointerClientX >= rect.left - extra &&
+        pointerClientX <= rect.right + extra &&
+        pointerClientY >= rect.top - extra &&
+        pointerClientY <= rect.bottom + extra
+      );
+    }
+
+    // NO 버튼 직접 진입 시 즉시 강하게 회피
+    noBtn.addEventListener("touchstart", (e) => {
+      if (finished) return;
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      e.preventDefault();
+      moveNoButtonFromPointer(touch.clientX, touch.clientY, true);
+    }, { passive: false });
+
+    noBtn.addEventListener("mouseenter", (e) => {
+      if (finished) return;
+      moveNoButtonFromPointer(e.clientX, e.clientY, true);
     });
-  }
 
-  function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
-  }
+    noBtn.addEventListener("pointerenter", (e) => {
+      if (finished) return;
+      moveNoButtonFromPointer(e.clientX, e.clientY, true);
+    });
 
-  function random(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
-  function moveNoButton(pointerX, pointerY) {
-    const rect = noBtn.getBoundingClientRect();
-    const btnW = rect.width;
-    const btnH = rect.height;
-
-    const padding = 8;
-
-    // 현재 버튼 중심
-    const centerX = rect.left + btnW / 2;
-    const centerY = rect.top + btnH / 2;
-
-    // 손가락/마우스 반대 방향 벡터
-    let dx = centerX - pointerX;
-    let dy = centerY - pointerY;
-
-    if (Math.abs(dx) < 6 && Math.abs(dy) < 6) {
-      dx = Math.random() > 0.5 ? 1 : -1;
-      dy = Math.random() > 0.5 ? 1 : -1;
-    }
-
-    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-    const nx = dx / dist;
-    const ny = dy / dist;
-
-    // 기존 디자인 유지 위해 transform만 사용
-    // (position fixed/absolute 절대 안 씀)
-    const jumpDistance = Math.max(90, Math.min(170, window.innerWidth * 0.25));
-
-    // 현재 transform 값 저장용 dataset
-    const currentX = parseFloat(noBtn.dataset.tx || "0");
-    const currentY = parseFloat(noBtn.dataset.ty || "0");
-
-    let targetX = currentX + nx * jumpDistance;
-    let targetY = currentY + ny * jumpDistance;
-
-    // 화면 기준으로 transform 범위 제한
-    const baseLeft = rect.left - currentX;
-    const baseTop = rect.top - currentY;
-
-    const minX = padding - baseLeft;
-    const maxX = window.innerWidth - btnW - padding - baseLeft;
-
-    const minY = padding - baseTop;
-    const maxY = window.innerHeight - btnH - padding - baseTop;
-
-    // 범위 벗어나면 랜덤 위치
-    if (targetX < minX || targetX > maxX || targetY < minY || targetY > maxY) {
-      targetX = random(minX, maxX);
-      targetY = random(minY, maxY);
-    }
-
-    targetX = clamp(targetX, minX, maxX);
-    targetY = clamp(targetY, minY, maxY);
-
-    noBtn.dataset.tx = targetX;
-    noBtn.dataset.ty = targetY;
-
-    noBtn.style.transition = "transform 0.08s ease-out";
-    noBtn.style.transform = `translate(${targetX}px, ${targetY}px) scale(1.04)`;
-
-    clearTimeout(noBtn._bounceTimer);
-    noBtn._bounceTimer = setTimeout(() => {
-      const x = parseFloat(noBtn.dataset.tx || "0");
-      const y = parseFloat(noBtn.dataset.ty || "0");
-      noBtn.style.transform = `translate(${x}px, ${y}px) scale(1)`;
-    }, 70);
-  }
-
-  function pointerNearNo(pointerX, pointerY, extra = 95) {
-    const rect = noBtn.getBoundingClientRect();
-    return (
-      pointerX >= rect.left - extra &&
-      pointerX <= rect.right + extra &&
-      pointerY >= rect.top - extra &&
-      pointerY <= rect.bottom + extra
-    );
-  }
-
-  // 마우스 hover
-  noBtn.addEventListener("mouseenter", (e) => {
-    moveNoButton(e.clientX, e.clientY);
-  });
-
-  // 클릭 방지
-  noBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    moveNoButton(window.innerWidth / 2, window.innerHeight / 2);
-  });
-
-  // 터치 시작: 근처 누르면 즉시 회피
-  document.addEventListener("touchstart", (e) => {
-    const touch = e.touches[0];
-    if (!touch) return;
-
-    const x = touch.clientX;
-    const y = touch.clientY;
-
-    if (pointerNearNo(x, y, 100)) {
+    noBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      moveNoButton(x, y);
+      if (finished) return;
+      moveNoButtonFromPointer(window.innerWidth / 2, window.innerHeight / 2, true);
+    });
+
+    // 모바일: 근처 터치하면 즉시 회피
+    document.addEventListener("touchstart", (e) => {
+      if (finished) return;
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      if (pointerNearNo(touch.clientX, touch.clientY, 115)) {
+        e.preventDefault();
+        moveNoButtonFromPointer(touch.clientX, touch.clientY, true);
+      }
+    }, { passive: false });
+
+    // 모바일: 손가락 누른 채 드래그하면 계속 일정 거리 유지하며 회피
+    document.addEventListener("touchmove", (e) => {
+      if (finished) return;
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      if (pointerNearNo(touch.clientX, touch.clientY, 140)) {
+        e.preventDefault();
+        keepDistanceFromPointer(touch.clientX, touch.clientY);
+      }
+    }, { passive: false });
+
+    // PC: 마우스 근처 오면 회피
+    document.addEventListener("mousemove", (e) => {
+      if (finished) return;
+
+      if (pointerNearNo(e.clientX, e.clientY, 100)) {
+        keepDistanceFromPointer(e.clientX, e.clientY);
+      }
+    });
+
+    // 리사이즈 시 화면 안쪽으로 보정
+    window.addEventListener("resize", () => {
+      if (finished || !isFloating) return;
+      setNoPosition(noX, noY);
+    });
+
+    yesBtn.addEventListener("click", () => {
+      finished = true;
+      result.textContent = "히히 ❤️";
+      noBtn.style.display = "none";
+      yesBtn.disabled = true;
+      yesBtn.style.opacity = "0.9";
+      createConfetti();
+    });
+
+    function createConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const dot = document.createElement("div");
+        dot.className = "confetti";
+        dot.style.left = Math.random() * 100 + "vw";
+        dot.style.animationDuration = (2 + Math.random() * 2) + "s";
+        dot.style.width = dot.style.height = (6 + Math.random() * 6) + "px";
+        dot.style.background = `hsl(${Math.random() * 360}, 90%, 70%)`;
+        document.body.appendChild(dot);
+
+        setTimeout(() => dot.remove(), 4500);
+      }
     }
-  }, { passive: false });
-
-  // 터치 드래그: 손가락 안 떼고 계속 따라오면 계속 회피
-  document.addEventListener("touchmove", (e) => {
-    const touch = e.touches[0];
-    if (!touch) return;
-
-    const x = touch.clientX;
-    const y = touch.clientY;
-
-    if (pointerNearNo(x, y, 110)) {
-      e.preventDefault();
-      moveNoButton(x, y);
-    }
-  }, { passive: false });
-
-  // 화면 크기 바뀌면 transform 값만 안전 보정
-  window.addEventListener("resize", () => {
-    const rect = noBtn.getBoundingClientRect();
-    const btnW = rect.width;
-    const btnH = rect.height;
-    const padding = 8;
-
-    const currentX = parseFloat(noBtn.dataset.tx || "0");
-    const currentY = parseFloat(noBtn.dataset.ty || "0");
-
-    const baseLeft = rect.left - currentX;
-    const baseTop = rect.top - currentY;
-
-    const minX = padding - baseLeft;
-    const maxX = window.innerWidth - btnW - padding - baseLeft;
-
-    const minY = padding - baseTop;
-    const maxY = window.innerHeight - btnH - padding - baseTop;
-
-    const safeX = clamp(currentX, minX, maxX);
-    const safeY = clamp(currentY, minY, maxY);
-
-    noBtn.dataset.tx = safeX;
-    noBtn.dataset.ty = safeY;
-    noBtn.style.transform = `translate(${safeX}px, ${safeY}px)`;
-  });
-</script>
+  </script>
+</body>
+</html>
