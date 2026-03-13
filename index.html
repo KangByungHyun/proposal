@@ -1,377 +1,165 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
-  />
+<script>
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const successMsg = document.getElementById("successMsg");
 
-  <title>❤️</title>
-  <meta property="og:title" content="❤️" />
-  <meta property="og:description" content=" " />
-  <meta property="og:type" content="website" />
-
-  <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      overflow-x: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      background: linear-gradient(180deg, #fff8fb 0%, #ffeef5 100%);
-      color: #222;
-      touch-action: none;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 24px 16px;
-    }
-
-    .wrap {
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.92);
-      border-radius: 28px;
-      padding: 40px 24px 36px;
-      box-shadow: 0 18px 50px rgba(255, 105, 160, 0.12);
-      text-align: center;
-      position: relative;
-      backdrop-filter: blur(8px);
-    }
-
-    .name {
-      font-size: 2rem;
-      font-weight: 800;
-      margin: 0;
-      color: #111;
-      letter-spacing: -0.03em;
-    }
-
-    .line1 {
-      margin: 18px 0 0;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #333;
-      letter-spacing: -0.02em;
-    }
-
-    .heart {
-      display: inline-block;
-      margin-left: 6px;
-      font-size: 1.4rem;
-      transform: translateY(2px);
-      animation: pulse 1.2s infinite ease-in-out;
-    }
-
-    .line2 {
-      margin: 28px 0 0;
-      font-size: 1.9rem;
-      font-weight: 900;
-      color: #ff4f8b;
-      letter-spacing: -0.04em;
-      line-height: 1.3;
-    }
-
-    .btn-row {
-      margin-top: 42px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 16px;
-      position: relative;
-      min-height: 64px;
-    }
-
-    button {
-      border: none;
-      outline: none;
-      cursor: pointer;
-      font-weight: 800;
-      font-size: 1.05rem;
-      border-radius: 999px;
-      padding: 16px 30px;
-      min-width: 118px;
-      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-    }
-
-    #yesBtn {
-      background: #ff4f8b;
-      color: white;
-      box-shadow: 0 12px 24px rgba(255, 79, 139, 0.28);
-    }
-
-    #yesBtn:active {
-      transform: scale(0.97);
-    }
-
-    /* 초기에는 일반 버튼처럼 보이게 두고,
-       JS에서 fixed로 승격시켜 이동 */
-    #noBtn {
-      background: #f4f4f5;
-      color: #333;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
-      position: relative;
-      z-index: 30;
-    }
-
-    .hint {
-      margin-top: 28px;
-      font-size: 0.95rem;
-      color: #888;
-      line-height: 1.7;
-    }
-
-    .success {
-      display: none;
-      margin-top: 30px;
-      padding: 18px 16px;
-      border-radius: 20px;
-      background: #fff0f6;
-      color: #ff4f8b;
-      font-size: 1.1rem;
-      font-weight: 800;
-      animation: pop 0.35s ease;
-    }
-
-    .show {
-      display: block;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: translateY(2px) scale(1); }
-      50% { transform: translateY(2px) scale(1.15); }
-    }
-
-    @keyframes pop {
-      from {
-        opacity: 0;
-        transform: translateY(8px) scale(0.96);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    @media (max-width: 420px) {
-      .card {
-        padding: 34px 20px 30px;
-        border-radius: 24px;
-      }
-
-      .name {
-        font-size: 1.8rem;
-      }
-
-      .line1 {
-        font-size: 1.25rem;
-      }
-
-      .line2 {
-        font-size: 1.7rem;
-      }
-
-      button {
-        min-width: 108px;
-        padding: 15px 24px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="card">
-      <h1 class="name">지혜야</h1>
-      <p class="line1">많이 많이 사랑해 <span class="heart">💗</span></p>
-      <p class="line2">나랑 결혼 해 줄래?</p>
-
-      <div class="btn-row" id="btnRow">
-        <button id="yesBtn">YES</button>
-        <button id="noBtn">NO</button>
-      </div>
-
-      <div class="success" id="successMsg">
-        💍 역시 정답은 YES지 😘
-      </div>
-
-      <div class="hint">
-        힌트: 정답은 YES 😏
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const btnRow = document.getElementById("btnRow");
-    const successMsg = document.getElementById("successMsg");
-
-    let noFloating = false;
-    let noX = 0;
-    let noY = 0;
-    let noW = 0;
-    let noH = 0;
-
-    function clamp(value, min, max) {
-      return Math.max(min, Math.min(max, value));
-    }
-
-    function random(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
-    function makeNoFloating() {
-      if (noFloating) return;
-
-      const rect = noBtn.getBoundingClientRect();
-
-      noW = rect.width;
-      noH = rect.height;
-      noX = rect.left;
-      noY = rect.top;
-
-      noBtn.style.position = "fixed";
-      noBtn.style.left = noX + "px";
-      noBtn.style.top = noY + "px";
-      noBtn.style.margin = "0";
-      noBtn.style.zIndex = "9999";
-      noBtn.style.transition = "left 0.08s ease-out, top 0.08s ease-out, transform 0.08s ease-out";
-
-      noFloating = true;
-    }
-
-    function setNoPosition(x, y) {
-      const padding = 10;
-      const maxX = window.innerWidth - noW - padding;
-      const maxY = window.innerHeight - noH - padding;
-
-      noX = clamp(x, padding, maxX);
-      noY = clamp(y, padding, maxY);
-
-      noBtn.style.left = noX + "px";
-      noBtn.style.top = noY + "px";
-    }
-
-    function jumpAwayFrom(pointerX, pointerY) {
-      makeNoFloating();
-
-      const rect = noBtn.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      let dx = centerX - pointerX;
-      let dy = centerY - pointerY;
-
-      // 손가락이 정중앙 근처면 랜덤 방향 부여
-      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) {
-        dx = Math.random() > 0.5 ? 1 : -1;
-        dy = Math.random() > 0.5 ? 1 : -1;
-      }
-
-      const distance = Math.sqrt(dx * dx + dy * dy) || 1;
-      const nx = dx / distance;
-      const ny = dy / distance;
-
-      // 더 "휙휙" 도망가게: 거리 크게
-      const jumpDistance = Math.max(110, Math.min(190, window.innerWidth * 0.28));
-
-      let targetX = rect.left + nx * jumpDistance;
-      let targetY = rect.top + ny * jumpDistance;
-
-      // 화면 밖으로 가려 하면 랜덤 보정
-      const padding = 10;
-      const maxX = window.innerWidth - rect.width - padding;
-      const maxY = window.innerHeight - rect.height - padding;
-
-      if (targetX < padding || targetX > maxX || targetY < padding || targetY > maxY) {
-        targetX = random(padding, maxX);
-        targetY = random(padding, maxY);
-      }
-
-      setNoPosition(targetX, targetY);
-
-      // 살짝 튀는 느낌
-      noBtn.style.transform = "scale(1.06)";
-      setTimeout(() => {
-        noBtn.style.transform = "scale(1)";
-      }, 70);
-    }
-
-    function pointerNearNo(pointerX, pointerY, extra = 80) {
-      const rect = noBtn.getBoundingClientRect();
-      return (
-        pointerX >= rect.left - extra &&
-        pointerX <= rect.right + extra &&
-        pointerY >= rect.top - extra &&
-        pointerY <= rect.bottom + extra
-      );
-    }
-
-    // YES 클릭
+  // YES 버튼 클릭
+  if (yesBtn && successMsg) {
     yesBtn.addEventListener("click", () => {
       successMsg.classList.add("show");
       yesBtn.textContent = "💖 YES 💖";
     });
+  }
 
-    // 마우스용
-    noBtn.addEventListener("mouseenter", (e) => {
-      jumpAwayFrom(e.clientX, e.clientY);
-    });
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
 
-    noBtn.addEventListener("click", (e) => {
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function moveNoButton(pointerX, pointerY) {
+    const rect = noBtn.getBoundingClientRect();
+    const btnW = rect.width;
+    const btnH = rect.height;
+
+    const padding = 8;
+
+    // 현재 버튼 중심
+    const centerX = rect.left + btnW / 2;
+    const centerY = rect.top + btnH / 2;
+
+    // 손가락/마우스 반대 방향 벡터
+    let dx = centerX - pointerX;
+    let dy = centerY - pointerY;
+
+    if (Math.abs(dx) < 6 && Math.abs(dy) < 6) {
+      dx = Math.random() > 0.5 ? 1 : -1;
+      dy = Math.random() > 0.5 ? 1 : -1;
+    }
+
+    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+    const nx = dx / dist;
+    const ny = dy / dist;
+
+    // 기존 디자인 유지 위해 transform만 사용
+    // (position fixed/absolute 절대 안 씀)
+    const jumpDistance = Math.max(90, Math.min(170, window.innerWidth * 0.25));
+
+    // 현재 transform 값 저장용 dataset
+    const currentX = parseFloat(noBtn.dataset.tx || "0");
+    const currentY = parseFloat(noBtn.dataset.ty || "0");
+
+    let targetX = currentX + nx * jumpDistance;
+    let targetY = currentY + ny * jumpDistance;
+
+    // 화면 기준으로 transform 범위 제한
+    const baseLeft = rect.left - currentX;
+    const baseTop = rect.top - currentY;
+
+    const minX = padding - baseLeft;
+    const maxX = window.innerWidth - btnW - padding - baseLeft;
+
+    const minY = padding - baseTop;
+    const maxY = window.innerHeight - btnH - padding - baseTop;
+
+    // 범위 벗어나면 랜덤 위치
+    if (targetX < minX || targetX > maxX || targetY < minY || targetY > maxY) {
+      targetX = random(minX, maxX);
+      targetY = random(minY, maxY);
+    }
+
+    targetX = clamp(targetX, minX, maxX);
+    targetY = clamp(targetY, minY, maxY);
+
+    noBtn.dataset.tx = targetX;
+    noBtn.dataset.ty = targetY;
+
+    noBtn.style.transition = "transform 0.08s ease-out";
+    noBtn.style.transform = `translate(${targetX}px, ${targetY}px) scale(1.04)`;
+
+    clearTimeout(noBtn._bounceTimer);
+    noBtn._bounceTimer = setTimeout(() => {
+      const x = parseFloat(noBtn.dataset.tx || "0");
+      const y = parseFloat(noBtn.dataset.ty || "0");
+      noBtn.style.transform = `translate(${x}px, ${y}px) scale(1)`;
+    }, 70);
+  }
+
+  function pointerNearNo(pointerX, pointerY, extra = 95) {
+    const rect = noBtn.getBoundingClientRect();
+    return (
+      pointerX >= rect.left - extra &&
+      pointerX <= rect.right + extra &&
+      pointerY >= rect.top - extra &&
+      pointerY <= rect.bottom + extra
+    );
+  }
+
+  // 마우스 hover
+  noBtn.addEventListener("mouseenter", (e) => {
+    moveNoButton(e.clientX, e.clientY);
+  });
+
+  // 클릭 방지
+  noBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    moveNoButton(window.innerWidth / 2, window.innerHeight / 2);
+  });
+
+  // 터치 시작: 근처 누르면 즉시 회피
+  document.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    if (!touch) return;
+
+    const x = touch.clientX;
+    const y = touch.clientY;
+
+    if (pointerNearNo(x, y, 100)) {
       e.preventDefault();
-      jumpAwayFrom(window.innerWidth / 2, window.innerHeight / 2);
-    });
+      moveNoButton(x, y);
+    }
+  }, { passive: false });
 
-    // 터치 시작: NO 근처 누르면 즉시 도망
-    document.addEventListener("touchstart", (e) => {
-      const touch = e.touches[0];
-      if (!touch) return;
+  // 터치 드래그: 손가락 안 떼고 계속 따라오면 계속 회피
+  document.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+    if (!touch) return;
 
-      const x = touch.clientX;
-      const y = touch.clientY;
+    const x = touch.clientX;
+    const y = touch.clientY;
 
-      if (pointerNearNo(x, y, 90)) {
-        e.preventDefault();
-        jumpAwayFrom(x, y);
-      }
-    }, { passive: false });
+    if (pointerNearNo(x, y, 110)) {
+      e.preventDefault();
+      moveNoButton(x, y);
+    }
+  }, { passive: false });
 
-    // 터치 드래그: 손가락을 떼지 않고 따라가면 계속 도망
-    document.addEventListener("touchmove", (e) => {
-      const touch = e.touches[0];
-      if (!touch) return;
+  // 화면 크기 바뀌면 transform 값만 안전 보정
+  window.addEventListener("resize", () => {
+    const rect = noBtn.getBoundingClientRect();
+    const btnW = rect.width;
+    const btnH = rect.height;
+    const padding = 8;
 
-      const x = touch.clientX;
-      const y = touch.clientY;
+    const currentX = parseFloat(noBtn.dataset.tx || "0");
+    const currentY = parseFloat(noBtn.dataset.ty || "0");
 
-      if (pointerNearNo(x, y, 95)) {
-        e.preventDefault();
-        jumpAwayFrom(x, y);
-      }
-    }, { passive: false });
+    const baseLeft = rect.left - currentX;
+    const baseTop = rect.top - currentY;
 
-    // 화면 회전/리사이즈 시 버튼이 화면 밖이면 보정
-    window.addEventListener("resize", () => {
-      if (!noFloating) return;
-      setNoPosition(noX, noY);
-    });
-  </script>
-</body>
-</html>
+    const minX = padding - baseLeft;
+    const maxX = window.innerWidth - btnW - padding - baseLeft;
+
+    const minY = padding - baseTop;
+    const maxY = window.innerHeight - btnH - padding - baseTop;
+
+    const safeX = clamp(currentX, minX, maxX);
+    const safeY = clamp(currentY, minY, maxY);
+
+    noBtn.dataset.tx = safeX;
+    noBtn.dataset.ty = safeY;
+    noBtn.style.transform = `translate(${safeX}px, ${safeY}px)`;
+  });
+</script>
