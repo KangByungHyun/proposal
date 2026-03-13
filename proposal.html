@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>나랑 결혼 해줘!</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: "Malgun Gothic", Arial, sans-serif;
+      background: linear-gradient(135deg, #fff0f6, #ffe4ec, #fff8fb);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
+
+    .card {
+      width: min(90vw, 700px);
+      min-height: 420px;
+      background: rgba(255,255,255,0.92);
+      border-radius: 28px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      backdrop-filter: blur(8px);
+    }
+
+    .heart {
+      font-size: 56px;
+      margin-bottom: 10px;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+
+    h1 {
+      margin: 10px 0 18px;
+      font-size: 42px;
+      color: #ff3f7a;
+    }
+
+    p {
+      margin: 0 auto;
+      max-width: 520px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .buttons-area {
+      margin-top: 45px;
+      position: relative;
+      height: 180px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 16px 34px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      position: absolute;
+      user-select: none;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    #yesBtn {
+      left: 32%;
+      top: 60px;
+      background: #ff4f87;
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(255,79,135,0.35);
+    }
+
+    #noBtn {
+      left: 56%;
+      top: 60px;
+      background: #f1f1f1;
+      color: #666;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #ff3f7a;
+      min-height: 40px;
+    }
+
+    .small {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #999;
+    }
+
+    .confetti {
+      position: fixed;
+      top: -20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: fall linear forwards;
+      opacity: 0.9;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0.2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="heart">💖</div>
+    <h1>나랑 결혼 해줘!</h1>
+    <p>
+      너와 함께한 하루하루가 너무 소중했고,<br />
+      앞으로의 모든 날도 너와 함께하고 싶어.<br /><br />
+      내 평생의 가장 소중한 사람이 되어줄래?
+    </p>
+
+    <div class="buttons-area" id="playground">
+      <button class="btn" id="yesBtn">YES 💍</button>
+      <button class="btn" id="noBtn">NO 🙈</button>
+    </div>
+
+    <div id="result"></div>
+    <div class="small">※ 힌트: 정답은 YES야 😏</div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const result = document.getElementById("result");
+    const playground = document.getElementById("playground");
+
+    function moveNoButton() {
+      const areaRect = playground.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = areaRect.width - btnRect.width;
+      const maxY = areaRect.height - btnRect.height;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    }
+
+    // 마우스가 가까이 오면 도망
+    document.addEventListener("mousemove", (e) => {
+      const rect = noBtn.getBoundingClientRect();
+      const btnCenterX = rect.left + rect.width / 2;
+      const btnCenterY = rect.top + rect.height / 2;
+
+      const dx = e.clientX - btnCenterX;
+      const dy = e.clientY - btnCenterY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 120) {
+        moveNoButton();
+      }
+    });
+
+    // 혹시 터치/우연 클릭 방지
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    yesBtn.addEventListener("click", () => {
+      result.innerHTML = "고마워... ❤️ 이제 진짜 평생 같이하자 💍";
+      yesBtn.disabled = true;
+      yesBtn.style.opacity = "0.85";
+      noBtn.style.display = "none";
+      createConfetti();
+    });
+
+    function createConfetti() {
+      for (let i = 0; i < 80; i++) {
+        const dot = document.createElement("div");
+        dot.className = "confetti";
+        dot.style.left = Math.random() * 100 + "vw";
+        dot.style.animationDuration = (2 + Math.random() * 3) + "s";
+        dot.style.width = dot.style.height = (6 + Math.random() * 10) + "px";
+        dot.style.background = `hsl(${Math.random() * 360}, 90%, 70%)`;
+        document.body.appendChild(dot);
+
+        setTimeout(() => dot.remove(), 5500);
+      }
+    }
+  </script>
+</body>
+</html>
