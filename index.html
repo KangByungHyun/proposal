@@ -6,31 +6,22 @@
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
   />
-  <title>나랑 결혼 해줘!</title>
+  <title>❤️</title>
   <style>
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
 
-    :root {
-      --pink: #ff5c92;
-      --pink-dark: #ff3f7a;
-      --card-bg: rgba(255, 255, 255, 0.96);
-      --text-main: #333;
-      --text-sub: #666;
-    }
-
-    html,
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       width: 100%;
-      min-height: 100%;
-      overflow-x: hidden;
-      font-family: "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif;
-      background: linear-gradient(135deg, #fff2f7, #ffe7ef, #fff9fc);
-      color: var(--text-main);
+      height: 100%;
+      overflow: hidden;
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      background: #fff7fa;
+      color: #111;
     }
 
     body {
@@ -39,75 +30,64 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 18px;
+      padding: 20px;
     }
 
-    .card {
-      width: min(92vw, 760px);
-      min-height: min(82dvh, 760px);
-      background: var(--card-bg);
-      border-radius: 28px;
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.1);
-      padding: 28px 20px 24px;
+    .wrap {
+      width: 100%;
+      max-width: 420px;
       text-align: center;
       position: relative;
-      backdrop-filter: blur(8px);
-      overflow: hidden;
     }
 
-    .heart {
-      font-size: clamp(40px, 9vw, 60px);
-      margin-bottom: 8px;
-      animation: pulse 1.2s infinite;
-      line-height: 1;
+    .name {
+      font-size: clamp(28px, 8vw, 42px);
+      font-weight: 700;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
     }
 
-    @keyframes pulse {
+    .love {
+      font-size: clamp(24px, 6.5vw, 34px);
+      font-weight: 600;
+      margin-bottom: 16px;
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+    }
+
+    .love .heart {
+      display: inline-block;
+      margin-left: 6px;
+      animation: beat 1.2s infinite;
+    }
+
+    @keyframes beat {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+      50% { transform: scale(1.12); }
     }
 
-    h1 {
-      margin: 10px 0 18px;
-      font-size: clamp(28px, 7vw, 48px);
-      color: var(--pink-dark);
-      line-height: 1.2;
+    .question {
+      font-size: clamp(30px, 9vw, 48px);
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      margin-bottom: 60px;
     }
 
-    p {
-      margin: 0 auto;
-      max-width: 560px;
-      font-size: clamp(16px, 4.4vw, 22px);
-      line-height: 1.8;
-      color: #555;
-      word-break: keep-all;
-    }
-
-    /* 버튼 영역 */
     .buttons-area {
-      margin-top: 34px;
       position: relative;
       width: 100%;
-      height: clamp(210px, 34vh, 300px);
-      border-radius: 22px;
-    }
-
-    /* YES 버튼은 고정 레이아웃 */
-    .yes-wrap {
-      position: absolute;
-      left: 50%;
-      top: 48%;
-      transform: translate(-50%, -50%);
-      z-index: 1;
-      pointer-events: none; /* 래퍼는 클릭 막고 버튼만 클릭 */
+      height: 180px;
     }
 
     .btn {
       border: none;
       border-radius: 999px;
-      padding: 15px 28px;
-      font-size: clamp(18px, 4.8vw, 24px);
-      font-weight: 800;
+      padding: 16px 30px;
+      min-width: 140px;
+      min-height: 58px;
+      font-size: clamp(18px, 5vw, 22px);
+      font-weight: 700;
       cursor: pointer;
       user-select: none;
       touch-action: manipulation;
@@ -115,50 +95,30 @@
     }
 
     #yesBtn {
-      position: relative;
-      min-width: 170px;
-      min-height: 64px;
-      background: var(--pink);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-120%, -50%);
+      background: #111;
       color: #fff;
-      box-shadow: 0 12px 24px rgba(255, 92, 146, 0.28);
-      pointer-events: auto;
-      transition: transform 0.15s ease, opacity 0.2s ease;
     }
 
-    #yesBtn:active {
-      transform: scale(0.97);
-    }
-
-    /* NO 버튼만 도망다니는 오버레이 */
     #noBtn {
       position: absolute;
-      z-index: 3;
-      min-width: 150px;
-      min-height: 62px;
-      background: #f5f5f5;
-      color: #555;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-      transition: left 0.18s ease, top 0.18s ease, transform 0.12s ease;
-    }
-
-    #noBtn:active {
-      transform: scale(0.98);
+      left: 50%;
+      top: 50%;
+      transform: translate(20%, -50%);
+      background: #fff;
+      color: #111;
+      border: 1.5px solid #ddd;
     }
 
     #result {
       margin-top: 12px;
-      font-size: clamp(22px, 5.2vw, 32px);
-      font-weight: bold;
-      color: var(--pink-dark);
-      min-height: 42px;
-      line-height: 1.5;
-    }
-
-    .small {
-      margin-top: 14px;
-      font-size: clamp(13px, 3.7vw, 16px);
-      color: #999;
-      line-height: 1.7;
+      min-height: 40px;
+      font-size: clamp(22px, 6vw, 28px);
+      font-weight: 700;
+      color: #e11d48;
     }
 
     .confetti {
@@ -168,237 +128,172 @@
       height: 10px;
       border-radius: 50%;
       animation: fall linear forwards;
-      opacity: 0.9;
-      z-index: 9999;
       pointer-events: none;
+      z-index: 9999;
     }
 
     @keyframes fall {
       to {
         transform: translateY(110vh) rotate(720deg);
-        opacity: 0.2;
+        opacity: 0.15;
       }
     }
 
     @media (max-width: 420px) {
-      .card {
-        border-radius: 24px;
-        padding: 22px 16px 20px;
+      .buttons-area {
+        height: 200px;
       }
 
-      .buttons-area {
-        height: 240px;
+      .btn {
+        min-width: 128px;
+        min-height: 56px;
       }
 
       #yesBtn {
-        min-width: 160px;
-        min-height: 60px;
+        transform: translate(-110%, -50%);
       }
 
       #noBtn {
-        min-width: 136px;
-        min-height: 58px;
+        transform: translate(10%, -50%);
       }
     }
   </style>
 </head>
 <body>
-  <div class="card" id="card">
-    <div class="heart">💖</div>
-    <h1>나랑 결혼 해줘!</h1>
-    <p>
-      너와 함께한 하루하루가 너무 소중했고,<br />
-      앞으로의 모든 날도 너와 함께하고 싶어.<br /><br />
-      내 평생의 가장 소중한 사람이 되어줄래?
-    </p>
+  <div class="wrap">
+    <div class="name">지혜야</div>
+    <div class="love">
+      많이 많이 사랑해 <span class="heart">❤️</span>
+    </div>
+    <div class="question">나랑 결혼 해 줄래?</div>
 
     <div class="buttons-area" id="playground">
-      <div class="yes-wrap" id="yesWrap">
-        <button class="btn" id="yesBtn">YES 💍</button>
-      </div>
-
-      <button class="btn" id="noBtn">NO 🙈</button>
+      <button class="btn" id="yesBtn">YES</button>
+      <button class="btn" id="noBtn">NO</button>
     </div>
 
     <div id="result"></div>
-    <div class="small">
-      ※ 힌트: 정답은 YES야 😉<br />
-      모바일에서도 NO는 쉽지 않을 거야 😎
-    </div>
   </div>
 
   <script>
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
-    const yesWrap = document.getElementById("yesWrap");
     const result = document.getElementById("result");
     const playground = document.getElementById("playground");
 
-    let noMoveLocked = false;
-    let initialized = false;
+    let finished = false;
 
     function clamp(value, min, max) {
       return Math.max(min, Math.min(max, value));
     }
 
-    function getRelativeRect(childRect, parentRect) {
-      return {
-        left: childRect.left - parentRect.left,
-        top: childRect.top - parentRect.top,
-        width: childRect.width,
-        height: childRect.height,
-        right: childRect.left - parentRect.left + childRect.width,
-        bottom: childRect.top - parentRect.top + childRect.height,
-        centerX: childRect.left - parentRect.left + childRect.width / 2,
-        centerY: childRect.top - parentRect.top + childRect.height / 2
-      };
-    }
-
-    function isOverlappingOrTooClose(x, y, safeGap = 24) {
-      const areaRect = playground.getBoundingClientRect();
-      const yesRect = yesBtn.getBoundingClientRect();
-      const noRect = noBtn.getBoundingClientRect();
-
-      const yesRel = getRelativeRect(yesRect, areaRect);
-
-      const noWidth = noRect.width || 150;
-      const noHeight = noRect.height || 60;
-
-      const noLeft = x;
-      const noTop = y;
-      const noRight = x + noWidth;
-      const noBottom = y + noHeight;
-
-      return !(
-        noRight < yesRel.left - safeGap ||
-        noLeft > yesRel.right + safeGap ||
-        noBottom < yesRel.top - safeGap ||
-        noTop > yesRel.bottom + safeGap
-      );
-    }
-
-    function setNoButtonInitialPosition() {
-      const areaRect = playground.getBoundingClientRect();
-      const noRect = noBtn.getBoundingClientRect();
-
-      const x = clamp(areaRect.width * 0.12, 8, areaRect.width - noRect.width - 8);
-      const y = clamp(areaRect.height * 0.62, 8, areaRect.height - noRect.height - 8);
-
-      noBtn.style.left = `${x}px`;
-      noBtn.style.top = `${y}px`;
-    }
-
     function moveNoButton() {
-      if (noMoveLocked) return;
+      if (finished) return;
 
       const areaRect = playground.getBoundingClientRect();
       const noRect = noBtn.getBoundingClientRect();
+      const yesRect = yesBtn.getBoundingClientRect();
+
+      const yesLeft = yesRect.left - areaRect.left;
+      const yesTop = yesRect.top - areaRect.top;
+      const yesRight = yesLeft + yesRect.width;
+      const yesBottom = yesTop + yesRect.height;
 
       const margin = 8;
-      const maxX = Math.max(margin, areaRect.width - noRect.width - margin);
-      const maxY = Math.max(margin, areaRect.height - noRect.height - margin);
+      const maxX = areaRect.width - noRect.width - margin;
+      const maxY = areaRect.height - noRect.height - margin;
 
       let x = 0;
       let y = 0;
       let found = false;
 
-      // YES 버튼과 겹치지 않는 위치 찾기
       for (let i = 0; i < 40; i++) {
-        const candidateX = margin + Math.random() * (maxX - margin);
-        const candidateY = margin + Math.random() * (maxY - margin);
+        const cx = Math.random() * (maxX - margin) + margin;
+        const cy = Math.random() * (maxY - margin) + margin;
 
-        if (!isOverlappingOrTooClose(candidateX, candidateY, 26)) {
-          x = candidateX;
-          y = candidateY;
+        const noLeft = cx;
+        const noTop = cy;
+        const noRight = cx + noRect.width;
+        const noBottom = cy + noRect.height;
+
+        const safeGap = 20;
+
+        const overlap = !(
+          noRight < yesLeft - safeGap ||
+          noLeft > yesRight + safeGap ||
+          noBottom < yesTop - safeGap ||
+          noTop > yesBottom + safeGap
+        );
+
+        if (!overlap) {
+          x = cx;
+          y = cy;
           found = true;
           break;
         }
       }
 
-      // 못 찾으면 그냥 아래쪽 우선
       if (!found) {
-        x = margin + Math.random() * (maxX - margin);
-        y = Math.max(areaRect.height * 0.68, margin);
-        y = clamp(y, margin, maxY);
+        x = Math.random() * (maxX - margin) + margin;
+        y = Math.random() * (maxY - margin) + margin;
       }
 
-      noBtn.style.left = `${x}px`;
-      noBtn.style.top = `${y}px`;
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+      noBtn.style.transform = "none";
     }
 
-    function initLayout() {
-      setNoButtonInitialPosition();
-      initialized = true;
-    }
-
-    // 모바일에서 첫 터치부터 반응
     noBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
       moveNoButton();
     }, { passive: false });
 
-    noBtn.addEventListener("pointerenter", moveNoButton);
     noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("pointerenter", moveNoButton);
 
     noBtn.addEventListener("click", (e) => {
       e.preventDefault();
       moveNoButton();
     });
 
-    // 데스크톱용: 마우스가 가까이 오면 도망
     document.addEventListener("mousemove", (e) => {
-      if (!initialized) return;
+      if (finished) return;
 
       const rect = noBtn.getBoundingClientRect();
-      const btnCenterX = rect.left + rect.width / 2;
-      const btnCenterY = rect.top + rect.height / 2;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-      const dx = e.clientX - btnCenterX;
-      const dy = e.clientY - btnCenterY;
+      const dx = e.clientX - centerX;
+      const dy = e.clientY - centerY;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance < 110) {
+      if (distance < 100) {
         moveNoButton();
       }
     });
 
     yesBtn.addEventListener("click", () => {
-      result.innerHTML = "ㅋㅋㅋ 장난 성공 ❤️";
-      yesBtn.disabled = true;
-      yesBtn.style.opacity = "0.88";
+      finished = true;
+      result.textContent = "히히 ❤️";
       noBtn.style.display = "none";
-      noMoveLocked = true;
+      yesBtn.disabled = true;
+      yesBtn.style.opacity = "0.9";
       createConfetti();
     });
 
     function createConfetti() {
-      for (let i = 0; i < 70; i++) {
+      for (let i = 0; i < 50; i++) {
         const dot = document.createElement("div");
         dot.className = "confetti";
         dot.style.left = Math.random() * 100 + "vw";
-        dot.style.animationDuration = (2 + Math.random() * 2.5) + "s";
-        dot.style.width = dot.style.height = (6 + Math.random() * 8) + "px";
+        dot.style.animationDuration = (2 + Math.random() * 2) + "s";
+        dot.style.width = dot.style.height = (6 + Math.random() * 6) + "px";
         dot.style.background = `hsl(${Math.random() * 360}, 90%, 70%)`;
         document.body.appendChild(dot);
 
-        setTimeout(() => dot.remove(), 5000);
+        setTimeout(() => dot.remove(), 4500);
       }
     }
-
-    window.addEventListener("load", () => {
-      requestAnimationFrame(() => {
-        initLayout();
-      });
-    });
-
-    window.addEventListener("resize", () => {
-      // 화면 회전/주소창 높이 변경 대응
-      requestAnimationFrame(() => {
-        if (noBtn.style.display !== "none") {
-          setNoButtonInitialPosition();
-        }
-      });
-    });
   </script>
 </body>
 </html>
