@@ -20,7 +20,6 @@
       background: #fff7fa;
       color: #111;
       touch-action: none;
-      /* ☆ 전체 영역 선택 방지 */
       -webkit-user-select: none;
       user-select: none;
     }
@@ -37,12 +36,11 @@
       max-width: 420px;
       text-align: center;
       position: relative;
-      /* ☆ 문구 영역 드래그 및 선택 방지 */
       pointer-events: none; 
     }
 
     .wrap * {
-      pointer-events: auto; /* 버튼 등은 다시 클릭 가능하게 */
+      pointer-events: auto;
     }
 
     .name { font-size: 32px; font-weight: 700; margin-bottom: 15px; }
@@ -73,7 +71,7 @@
     #yesBtn {
       background: #111;
       color: #fff;
-      left: calc(50% - 145px); /* YES 고정 */
+      left: calc(50% - 145px);
       z-index: 100;
     }
 
@@ -106,7 +104,7 @@
 <body>
   <div class="wrap">
     <div class="name">지혜야</div>
-    <div class="love">많이 많이 사랑해 ❤️</div>
+    <div class="love">많이 많이 사랑해 <span style="display:inline-block; animation: beat 1.2s infinite;">❤️</span></div>
     <div class="question">나랑 결혼 해 줄래?</div>
 
     <div class="buttons-area">
@@ -117,7 +115,7 @@
     <div id="result"></div>
   </div>
 
-  <div class="version">v1.2</div>
+  <div class="version">v1.3</div>
 
   <script>
     const noBtn = document.getElementById("noBtn");
@@ -152,14 +150,13 @@
       let dx = centerX - clientX;
       let dy = centerY - clientY;
 
-      // ☆ 모서리 버벅임 방지: 손가락과 중심이 너무 가까우면 랜덤 벡터 추가
       if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
         dx = (Math.random() - 0.5) * 50;
         dy = (Math.random() - 0.5) * 50;
       }
 
       const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      const pushDist = 100; // 도망 속도/거리 조절
+      const pushDist = 100; 
       
       let targetX = btnRect.left + (dx / dist) * pushDist;
       let targetY = btnRect.top + (dy / dist) * pushDist;
@@ -168,13 +165,10 @@
       const screenW = window.innerWidth;
       const screenH = window.innerHeight;
 
-      // ☆ 벽 충돌 시 탈출 로직 개선
       if (targetX <= pad || targetX >= screenW - btnW - pad) {
-        // X축이 막히면 Y축으로 더 많이 튕기게 함
         targetY += (Math.random() - 0.5) * 100;
       }
       if (targetY <= pad || targetY >= screenH - btnH - pad) {
-        // Y축이 막히면 X축으로 더 많이 튕기게 함
         targetX += (Math.random() - 0.5) * 100;
       }
 
@@ -194,7 +188,6 @@
       }
     }
 
-    // 터치/마우스 이벤트 통합
     document.addEventListener("mousemove", (e) => checkEvade(e.clientX, e.clientY));
 
     document.addEventListener("touchstart", (e) => {
@@ -208,7 +201,6 @@
       const touch = e.touches[0];
       const rect = noBtn.getBoundingClientRect();
       
-      // ☆ 드래깅 중 방해 요소 차단 (텍스트 드래그 방지 포함)
       if (touch.clientX >= rect.left - 150 && touch.clientX <= rect.right + 150 &&
           touch.clientY >= rect.top - 150 && touch.clientY <= rect.bottom + 150) {
         if (e.cancelable) e.preventDefault(); 
@@ -224,7 +216,8 @@
     yesBtn.addEventListener("click", () => {
       if (finished) return;
       finished = true;
-      result.textContent = "히히 ❤️";
+      // ☆ 결과 문구 수정
+      result.textContent = "고마워 사랑해 ❤️"; 
       noBtn.style.display = "none";
       createConfetti();
       sendYesLog();
@@ -248,5 +241,11 @@
       fetch(URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ type: "YES" }) });
     }
   </script>
+  <style>
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+  </style>
 </body>
 </html>
