@@ -6,10 +6,12 @@
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
   />
+
   <title>❤️</title>
   <meta property="og:title" content="❤️" />
   <meta property="og:description" content=" " />
   <meta property="og:type" content="website" />
+
   <style>
     * {
       box-sizing: border-box;
@@ -20,284 +22,356 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      background: #fff7fa;
-      color: #111;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      background: linear-gradient(180deg, #fff8fb 0%, #ffeef5 100%);
+      color: #222;
+      touch-action: none;
     }
 
     body {
-      min-height: 100vh;
-      min-height: 100dvh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 24px 16px;
     }
 
     .wrap {
       width: 100%;
       max-width: 420px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 28px;
+      padding: 40px 24px 36px;
+      box-shadow: 0 18px 50px rgba(255, 105, 160, 0.12);
       text-align: center;
       position: relative;
+      backdrop-filter: blur(8px);
     }
 
     .name {
-      font-size: clamp(28px, 8vw, 42px);
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0;
+      color: #111;
+      letter-spacing: -0.03em;
+    }
+
+    .line1 {
+      margin: 18px 0 0;
+      font-size: 1.4rem;
       font-weight: 700;
-      margin-bottom: 18px;
+      color: #333;
       letter-spacing: -0.02em;
     }
 
-    .love {
-      font-size: clamp(24px, 6.5vw, 34px);
-      font-weight: 600;
-      margin-bottom: 16px;
-      line-height: 1.4;
-      letter-spacing: -0.02em;
-    }
-
-    .love .heart {
+    .heart {
       display: inline-block;
       margin-left: 6px;
-      animation: beat 1.2s infinite;
+      font-size: 1.4rem;
+      transform: translateY(2px);
+      animation: pulse 1.2s infinite ease-in-out;
     }
 
-    @keyframes beat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.12); }
+    .line2 {
+      margin: 28px 0 0;
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: #ff4f8b;
+      letter-spacing: -0.04em;
+      line-height: 1.3;
     }
 
-    .question {
-      font-size: clamp(30px, 9vw, 48px);
-      font-weight: 800;
-      line-height: 1.25;
-      letter-spacing: -0.03em;
-      margin-bottom: 60px;
-    }
-
-    .buttons-area {
+    .btn-row {
+      margin-top: 42px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
       position: relative;
-      width: 100%;
-      height: 180px;
+      min-height: 64px;
     }
 
-    .btn {
+    button {
       border: none;
+      outline: none;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 1.05rem;
       border-radius: 999px;
       padding: 16px 30px;
-      min-width: 140px;
-      min-height: 58px;
-      font-size: clamp(18px, 5vw, 22px);
-      font-weight: 700;
-      cursor: pointer;
+      min-width: 118px;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
       user-select: none;
+      -webkit-user-select: none;
       touch-action: manipulation;
-      white-space: nowrap;
     }
 
     #yesBtn {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-120%, -50%);
-      background: #111;
-      color: #fff;
+      background: #ff4f8b;
+      color: white;
+      box-shadow: 0 12px 24px rgba(255, 79, 139, 0.28);
     }
 
+    #yesBtn:active {
+      transform: scale(0.97);
+    }
+
+    /* 초기에는 일반 버튼처럼 보이게 두고,
+       JS에서 fixed로 승격시켜 이동 */
     #noBtn {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(20%, -50%);
-      background: #fff;
-      color: #111;
-      border: 1.5px solid #ddd;
+      background: #f4f4f5;
+      color: #333;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+      position: relative;
+      z-index: 30;
     }
 
-    #result {
-      margin-top: 12px;
-      min-height: 40px;
-      font-size: clamp(22px, 6vw, 28px);
-      font-weight: 700;
-      color: #e11d48;
+    .hint {
+      margin-top: 28px;
+      font-size: 0.95rem;
+      color: #888;
+      line-height: 1.7;
     }
 
-    .confetti {
-      position: fixed;
-      top: -20px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      animation: fall linear forwards;
-      pointer-events: none;
-      z-index: 9999;
+    .success {
+      display: none;
+      margin-top: 30px;
+      padding: 18px 16px;
+      border-radius: 20px;
+      background: #fff0f6;
+      color: #ff4f8b;
+      font-size: 1.1rem;
+      font-weight: 800;
+      animation: pop 0.35s ease;
     }
 
-    @keyframes fall {
+    .show {
+      display: block;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translateY(2px) scale(1); }
+      50% { transform: translateY(2px) scale(1.15); }
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.96);
+      }
       to {
-        transform: translateY(110vh) rotate(720deg);
-        opacity: 0.15;
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
     }
 
     @media (max-width: 420px) {
-      .buttons-area {
-        height: 200px;
+      .card {
+        padding: 34px 20px 30px;
+        border-radius: 24px;
       }
 
-      .btn {
-        min-width: 128px;
-        min-height: 56px;
+      .name {
+        font-size: 1.8rem;
       }
 
-      #yesBtn {
-        transform: translate(-110%, -50%);
+      .line1 {
+        font-size: 1.25rem;
       }
 
-      #noBtn {
-        transform: translate(10%, -50%);
+      .line2 {
+        font-size: 1.7rem;
+      }
+
+      button {
+        min-width: 108px;
+        padding: 15px 24px;
       }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="name">지혜야</div>
-    <div class="love">
-      많이 많이 사랑해 <span class="heart">❤️</span>
-    </div>
-    <div class="question">나랑 결혼 해 줄래?</div>
+    <div class="card">
+      <h1 class="name">지혜야</h1>
+      <p class="line1">많이 많이 사랑해 <span class="heart">💗</span></p>
+      <p class="line2">나랑 결혼 해 줄래?</p>
 
-    <div class="buttons-area" id="playground">
-      <button class="btn" id="yesBtn">YES</button>
-      <button class="btn" id="noBtn">NO</button>
-    </div>
+      <div class="btn-row" id="btnRow">
+        <button id="yesBtn">YES</button>
+        <button id="noBtn">NO</button>
+      </div>
 
-    <div id="result"></div>
+      <div class="success" id="successMsg">
+        💍 역시 정답은 YES지 😘
+      </div>
+
+      <div class="hint">
+        힌트: 정답은 YES 😏
+      </div>
+    </div>
   </div>
 
   <script>
-    const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
-    const result = document.getElementById("result");
-    const playground = document.getElementById("playground");
+    const noBtn = document.getElementById("noBtn");
+    const btnRow = document.getElementById("btnRow");
+    const successMsg = document.getElementById("successMsg");
 
-    let finished = false;
+    let noFloating = false;
+    let noX = 0;
+    let noY = 0;
+    let noW = 0;
+    let noH = 0;
 
     function clamp(value, min, max) {
       return Math.max(min, Math.min(max, value));
     }
 
-    function moveNoButton() {
-      if (finished) return;
-
-      const areaRect = playground.getBoundingClientRect();
-      const noRect = noBtn.getBoundingClientRect();
-      const yesRect = yesBtn.getBoundingClientRect();
-
-      const yesLeft = yesRect.left - areaRect.left;
-      const yesTop = yesRect.top - areaRect.top;
-      const yesRight = yesLeft + yesRect.width;
-      const yesBottom = yesTop + yesRect.height;
-
-      const margin = 8;
-      const maxX = areaRect.width - noRect.width - margin;
-      const maxY = areaRect.height - noRect.height - margin;
-
-      let x = 0;
-      let y = 0;
-      let found = false;
-
-      for (let i = 0; i < 40; i++) {
-        const cx = Math.random() * (maxX - margin) + margin;
-        const cy = Math.random() * (maxY - margin) + margin;
-
-        const noLeft = cx;
-        const noTop = cy;
-        const noRight = cx + noRect.width;
-        const noBottom = cy + noRect.height;
-
-        const safeGap = 20;
-
-        const overlap = !(
-          noRight < yesLeft - safeGap ||
-          noLeft > yesRight + safeGap ||
-          noBottom < yesTop - safeGap ||
-          noTop > yesBottom + safeGap
-        );
-
-        if (!overlap) {
-          x = cx;
-          y = cy;
-          found = true;
-          break;
-        }
-      }
-
-      if (!found) {
-        x = Math.random() * (maxX - margin) + margin;
-        y = Math.random() * (maxY - margin) + margin;
-      }
-
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-      noBtn.style.transform = "none";
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
     }
 
-    noBtn.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      moveNoButton();
-    }, { passive: false });
+    function makeNoFloating() {
+      if (noFloating) return;
 
-    noBtn.addEventListener("mouseenter", moveNoButton);
-    noBtn.addEventListener("pointerenter", moveNoButton);
+      const rect = noBtn.getBoundingClientRect();
 
-    noBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      moveNoButton();
-    });
+      noW = rect.width;
+      noH = rect.height;
+      noX = rect.left;
+      noY = rect.top;
 
-    document.addEventListener("mousemove", (e) => {
-      if (finished) return;
+      noBtn.style.position = "fixed";
+      noBtn.style.left = noX + "px";
+      noBtn.style.top = noY + "px";
+      noBtn.style.margin = "0";
+      noBtn.style.zIndex = "9999";
+      noBtn.style.transition = "left 0.08s ease-out, top 0.08s ease-out, transform 0.08s ease-out";
+
+      noFloating = true;
+    }
+
+    function setNoPosition(x, y) {
+      const padding = 10;
+      const maxX = window.innerWidth - noW - padding;
+      const maxY = window.innerHeight - noH - padding;
+
+      noX = clamp(x, padding, maxX);
+      noY = clamp(y, padding, maxY);
+
+      noBtn.style.left = noX + "px";
+      noBtn.style.top = noY + "px";
+    }
+
+    function jumpAwayFrom(pointerX, pointerY) {
+      makeNoFloating();
 
       const rect = noBtn.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
-      const dx = e.clientX - centerX;
-      const dy = e.clientY - centerY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      let dx = centerX - pointerX;
+      let dy = centerY - pointerY;
 
-      if (distance < 100) {
-        moveNoButton();
+      // 손가락이 정중앙 근처면 랜덤 방향 부여
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) {
+        dx = Math.random() > 0.5 ? 1 : -1;
+        dy = Math.random() > 0.5 ? 1 : -1;
       }
-    });
 
-    yesBtn.addEventListener("click", () => {
-      finished = true;
-      result.textContent = "히히 ❤️";
-      noBtn.style.display = "none";
-      yesBtn.disabled = true;
-      yesBtn.style.opacity = "0.9";
-      createConfetti();
-    });
+      const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+      const nx = dx / distance;
+      const ny = dy / distance;
 
-    function createConfetti() {
-      for (let i = 0; i < 50; i++) {
-        const dot = document.createElement("div");
-        dot.className = "confetti";
-        dot.style.left = Math.random() * 100 + "vw";
-        dot.style.animationDuration = (2 + Math.random() * 2) + "s";
-        dot.style.width = dot.style.height = (6 + Math.random() * 6) + "px";
-        dot.style.background = `hsl(${Math.random() * 360}, 90%, 70%)`;
-        document.body.appendChild(dot);
+      // 더 "휙휙" 도망가게: 거리 크게
+      const jumpDistance = Math.max(110, Math.min(190, window.innerWidth * 0.28));
 
-        setTimeout(() => dot.remove(), 4500);
+      let targetX = rect.left + nx * jumpDistance;
+      let targetY = rect.top + ny * jumpDistance;
+
+      // 화면 밖으로 가려 하면 랜덤 보정
+      const padding = 10;
+      const maxX = window.innerWidth - rect.width - padding;
+      const maxY = window.innerHeight - rect.height - padding;
+
+      if (targetX < padding || targetX > maxX || targetY < padding || targetY > maxY) {
+        targetX = random(padding, maxX);
+        targetY = random(padding, maxY);
       }
+
+      setNoPosition(targetX, targetY);
+
+      // 살짝 튀는 느낌
+      noBtn.style.transform = "scale(1.06)";
+      setTimeout(() => {
+        noBtn.style.transform = "scale(1)";
+      }, 70);
     }
+
+    function pointerNearNo(pointerX, pointerY, extra = 80) {
+      const rect = noBtn.getBoundingClientRect();
+      return (
+        pointerX >= rect.left - extra &&
+        pointerX <= rect.right + extra &&
+        pointerY >= rect.top - extra &&
+        pointerY <= rect.bottom + extra
+      );
+    }
+
+    // YES 클릭
+    yesBtn.addEventListener("click", () => {
+      successMsg.classList.add("show");
+      yesBtn.textContent = "💖 YES 💖";
+    });
+
+    // 마우스용
+    noBtn.addEventListener("mouseenter", (e) => {
+      jumpAwayFrom(e.clientX, e.clientY);
+    });
+
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      jumpAwayFrom(window.innerWidth / 2, window.innerHeight / 2);
+    });
+
+    // 터치 시작: NO 근처 누르면 즉시 도망
+    document.addEventListener("touchstart", (e) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const x = touch.clientX;
+      const y = touch.clientY;
+
+      if (pointerNearNo(x, y, 90)) {
+        e.preventDefault();
+        jumpAwayFrom(x, y);
+      }
+    }, { passive: false });
+
+    // 터치 드래그: 손가락을 떼지 않고 따라가면 계속 도망
+    document.addEventListener("touchmove", (e) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const x = touch.clientX;
+      const y = touch.clientY;
+
+      if (pointerNearNo(x, y, 95)) {
+        e.preventDefault();
+        jumpAwayFrom(x, y);
+      }
+    }, { passive: false });
+
+    // 화면 회전/리사이즈 시 버튼이 화면 밖이면 보정
+    window.addEventListener("resize", () => {
+      if (!noFloating) return;
+      setNoPosition(noX, noY);
+    });
   </script>
 </body>
 </html>
-
