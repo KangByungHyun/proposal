@@ -2,10 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
   <title>❤️</title>
   <style>
     * {
@@ -18,107 +15,107 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden;
+      overflow: hidden; /* ☆ 스크롤 방지 */
       font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
       background: #fff7fa;
       color: #111;
     }
 
     body {
-      min-height: 100vh;
-      min-height: 100dvh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       padding: 20px;
+      touch-action: none; /* ☆ 시스템 스크롤/확대 방지 */
     }
 
     .wrap {
       width: 100%;
       max-width: 420px;
       text-align: center;
-      position: relative;
+      z-index: 10; /* ☆ 문구가 버튼보다 뒤에 있도록 설정 */
+      pointer-events: none; /* ☆ 문구 영역이 터치를 가로막지 않도록 설정 */
+    }
+
+    .wrap * {
+      pointer-events: auto; /* ☆ 텍스트 안의 요소는 클릭 가능하게 */
     }
 
     .name {
-      font-size: clamp(28px, 8vw, 42px);
+      font-size: clamp(24px, 7vw, 36px);
       font-weight: 700;
-      margin-bottom: 18px;
-      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+      color: #ff4d8d;
     }
 
     .love {
-      font-size: clamp(24px, 6.5vw, 34px);
+      font-size: clamp(20px, 6vw, 28px);
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       line-height: 1.4;
-      letter-spacing: -0.02em;
     }
 
     .love .heart {
       display: inline-block;
-      margin-left: 6px;
       animation: beat 1.2s infinite;
     }
 
     @keyframes beat {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.12); }
+      50% { transform: scale(1.2); }
     }
 
     .question {
-      font-size: clamp(30px, 9vw, 48px);
+      font-size: clamp(28px, 8vw, 40px);
       font-weight: 800;
-      line-height: 1.25;
-      letter-spacing: -0.03em;
-      margin-bottom: 60px;
+      margin-bottom: 40px;
     }
 
-    .buttons-area {
+    /* ☆ 버튼 영역 스타일 수정 */
+    .buttons-container {
       position: relative;
       width: 100%;
-      height: 180px;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
     }
 
     .btn {
       border: none;
-      border-radius: 999px;
+      border-radius: 20px;
       padding: 16px 30px;
-      min-width: 140px;
-      min-height: 58px;
-      font-size: clamp(18px, 5vw, 22px);
+      min-width: 120px;
+      font-size: 20px;
       font-weight: 700;
       cursor: pointer;
       user-select: none;
-      touch-action: manipulation;
-      white-space: nowrap;
+      transition: transform 0.1s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     #yesBtn {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-120%, -50%);
-      background: #111;
+      background: #ff4d8d;
       color: #fff;
+      z-index: 100; /* ☆ YES 버튼이 항상 위에 있도록 */
     }
 
     #noBtn {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(20%, -50%);
       background: #fff;
-      color: #111;
-      border: 1.5px solid #ddd;
+      color: #666;
+      border: 1px solid #eee;
+      position: absolute; /* ☆ 자유롭게 움직이도록 설정 */
+      transition: all 0.15s ease-out; /* ☆ 움직임 부드럽게 */
     }
 
     #result {
-      margin-top: 12px;
+      margin-top: 30px;
+      font-size: 32px;
+      font-weight: 800;
+      color: #ff4d8d;
       min-height: 40px;
-      font-size: clamp(22px, 6vw, 28px);
-      font-weight: 700;
-      color: #e11d48;
     }
 
     .confetti {
@@ -133,43 +130,19 @@
     }
 
     @keyframes fall {
-      to {
-        transform: translateY(110vh) rotate(720deg);
-        opacity: 0.15;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .buttons-area {
-        height: 200px;
-      }
-
-      .btn {
-        min-width: 128px;
-        min-height: 56px;
-      }
-
-      #yesBtn {
-        transform: translate(-110%, -50%);
-      }
-
-      #noBtn {
-        transform: translate(10%, -50%);
-      }
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="name">지혜야</div>
-    <div class="love">
-      많이 많이 사랑해 <span class="heart">❤️</span>
-    </div>
-    <div class="question">나랑 결혼 해 줄래?</div>
+    <div class="name">지혜야 ❤️</div>
+    <div class="love">많이 많이 사랑해</div>
+    <div class="question">나랑 계속 만나줄래?</div>
 
-    <div class="buttons-area" id="playground">
-      <button class="btn" id="yesBtn">YES</button>
-      <button class="btn" id="noBtn">NO</button>
+    <div class="buttons-container" id="playground">
+      <button class="btn" id="yesBtn">당연하지!</button>
+      <button class="btn" id="noBtn">아니?</button>
     </div>
 
     <div id="result"></div>
@@ -182,355 +155,95 @@
     const playground = document.getElementById("playground");
 
     let finished = false;
-    let isFloating = false;
-    let noX = 0;
-    let noY = 0;
 
-    function clamp(value, min, max) {
-      return Math.max(min, Math.min(max, value));
-    }
-
-    function random(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
-    function getYesRectInArea() {
-      const areaRect = playground.getBoundingClientRect();
-      const yesRect = yesBtn.getBoundingClientRect();
-
-      return {
-        left: yesRect.left - areaRect.left,
-        top: yesRect.top - areaRect.top,
-        right: yesRect.right - areaRect.left,
-        bottom: yesRect.bottom - areaRect.top,
-        width: yesRect.width,
-        height: yesRect.height
-      };
-    }
-
-    function getNoRectInArea() {
-      const areaRect = playground.getBoundingClientRect();
-      const noRect = noBtn.getBoundingClientRect();
-
-      return {
-        left: noRect.left - areaRect.left,
-        top: noRect.top - areaRect.top,
-        right: noRect.right - areaRect.left,
-        bottom: noRect.bottom - areaRect.top,
-        width: noRect.width,
-        height: noRect.height
-      };
-    }
-
-    function ensureFloating() {
-      if (isFloating) return;
-
-      const current = getNoRectInArea();
-      noX = current.left;
-      noY = current.top;
-
-      noBtn.style.left = noX + "px";
-      noBtn.style.top = noY + "px";
-      noBtn.style.transform = "none";
-      noBtn.style.transition = "left 0.08s ease-out, top 0.08s ease-out, transform 0.08s ease-out";
-
-      isFloating = true;
-    }
-
-    function overlapsYes(x, y, noW, noH, gap = 24) {
-      const yes = getYesRectInArea();
-
-      const noLeft = x;
-      const noTop = y;
-      const noRight = x + noW;
-      const noBottom = y + noH;
-
-      return !(
-        noRight < yes.left - gap ||
-        noLeft > yes.right + gap ||
-        noBottom < yes.top - gap ||
-        noTop > yes.bottom + gap
-      );
-    }
-
-    function setNoPosition(x, y) {
-      const areaRect = playground.getBoundingClientRect();
-      const noRect = noBtn.getBoundingClientRect();
-
-      const margin = 8;
-      const maxX = areaRect.width - noRect.width - margin;
-      const maxY = areaRect.height - noRect.height - margin;
-
-      x = clamp(x, margin, maxX);
-      y = clamp(y, margin, maxY);
-
-      // YES 버튼 겹침 방지
-      if (overlapsYes(x, y, noRect.width, noRect.height, 24)) {
-        let found = false;
-
-        for (let i = 0; i < 24; i++) {
-          const rx = random(margin, maxX);
-          const ry = random(margin, maxY);
-
-          if (!overlapsYes(rx, ry, noRect.width, noRect.height, 24)) {
-            x = rx;
-            y = ry;
-            found = true;
-            break;
-          }
-        }
-
-        if (!found) {
-          // 가장자리 쪽으로 밀어냄
-          if (x < areaRect.width / 2) {
-            x = margin;
-          } else {
-            x = maxX;
-          }
-
-          if (y < areaRect.height / 2) {
-            y = margin;
-          } else {
-            y = maxY;
-          }
-
-          x = clamp(x, margin, maxX);
-          y = clamp(y, margin, maxY);
-        }
-      }
-
-      noX = x;
-      noY = y;
-
-      noBtn.style.left = noX + "px";
-      noBtn.style.top = noY + "px";
-    }
-
-    function moveNoButtonFromPointer(pointerClientX, pointerClientY, forceJump = false) {
-      if (finished) return;
-
-      ensureFloating();
-
-      const areaRect = playground.getBoundingClientRect();
-      const noRect = noBtn.getBoundingClientRect();
-
-      const pointerX = pointerClientX - areaRect.left;
-      const pointerY = pointerClientY - areaRect.top;
-
-      const centerX = noX + noRect.width / 2;
-      const centerY = noY + noRect.height / 2;
-
-      let dx = centerX - pointerX;
-      let dy = centerY - pointerY;
-
-      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) {
-        dx = Math.random() > 0.5 ? 1 : -1;
-        dy = Math.random() > 0.5 ? 1 : -1;
-      }
-
-      const distance = Math.sqrt(dx * dx + dy * dy) || 1;
-      const nx = dx / distance;
-      const ny = dy / distance;
-
-      // 더 휙휙 도망가게
-      const jumpDistance = forceJump
-        ? Math.max(110, Math.min(170, areaRect.width * 0.42))
-        : Math.max(70, Math.min(120, areaRect.width * 0.28));
-
-      let targetX = noX + nx * jumpDistance;
-      let targetY = noY + ny * jumpDistance;
-
-      setNoPosition(targetX, targetY);
-
-      noBtn.style.transform = "scale(1.05)";
-      clearTimeout(noBtn._scaleTimer);
-      noBtn._scaleTimer = setTimeout(() => {
-        noBtn.style.transform = "scale(1)";
-      }, 70);
-    }
-
-    function keepDistanceFromPointer(pointerClientX, pointerClientY) {
-      if (finished) return;
-
-      ensureFloating();
-
-      const areaRect = playground.getBoundingClientRect();
-      const noRect = noBtn.getBoundingClientRect();
-
-      const pointerX = pointerClientX - areaRect.left;
-      const pointerY = pointerClientY - areaRect.top;
-
-      const centerX = noX + noRect.width / 2;
-      const centerY = noY + noRect.height / 2;
-
-      let dx = centerX - pointerX;
-      let dy = centerY - pointerY;
-
-      const currentDistance = Math.sqrt(dx * dx + dy * dy) || 1;
-
-      // 손가락과 항상 일정 거리 유지
-      const safeDistance = Math.max(95, Math.min(130, areaRect.width * 0.30));
-
-      if (currentDistance >= safeDistance) return;
-
-      let nx = dx / currentDistance;
-      let ny = dy / currentDistance;
-
-      if (!isFinite(nx) || !isFinite(ny)) {
-        nx = Math.random() > 0.5 ? 1 : -1;
-        ny = Math.random() > 0.5 ? 1 : -1;
-      }
-
-      const push = safeDistance - currentDistance + 24;
-
-      let targetX = noX + nx * push;
-      let targetY = noY + ny * push;
-
-      setNoPosition(targetX, targetY);
-    }
-
-    function pointerNearNo(pointerClientX, pointerClientY, extra = 110) {
+    // ☆ NO 버튼 초기 위치 잡기
+    function initNoButton() {
       const rect = noBtn.getBoundingClientRect();
+      // YES 버튼 옆에 적절히 배치 (처음엔 relative처럼 보이게)
+      noBtn.style.left = "calc(50% + 10px)"; 
+      noBtn.style.top = "50%";
+      noBtn.style.transform = "translate(0, -50%)";
+    }
+    window.onload = initNoButton;
 
-      return (
-        pointerClientX >= rect.left - extra &&
-        pointerClientX <= rect.right + extra &&
-        pointerClientY >= rect.top - extra &&
-        pointerClientY <= rect.bottom + extra
-      );
+    // ☆ 더 똑똑하게 도망가는 로직
+    function moveNoButton(e) {
+      if (finished) return;
+
+      // 터치든 마우스든 좌표 가져오기
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      const btnRect = noBtn.getBoundingClientRect();
+      const btnCenterX = btnRect.left + btnRect.width / 2;
+      const btnCenterY = btnRect.top + btnRect.height / 2;
+
+      // 거리 계산
+      const dist = Math.hypot(clientX - btnCenterX, clientY - btnCenterY);
+
+      // ☆ 일정 거리(100px) 안에 들어오면 도망
+      if (dist < 100) {
+        const padding = 50;
+        // 화면 안에서 랜덤한 새 좌표 생성
+        const newX = Math.random() * (window.innerWidth - btnRect.width - padding * 2) + padding;
+        const newY = Math.random() * (window.innerHeight - btnRect.height - padding * 2) + padding;
+
+        // ☆ 텍스트 영역(상단)을 피해서 아래쪽이나 옆쪽으로 더 잘 가도록 유도 가능
+        noBtn.style.position = 'fixed'; // ☆ playground 탈출하여 전체 화면 사용
+        noBtn.style.left = `${newX}px`;
+        noBtn.style.top = `${newY}px`;
+        noBtn.style.transform = 'none';
+      }
     }
 
-    function sendYesLog() {
-      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxSUaMjaRTMQeomllikrG1egbxXCvaI6FwfYPsoDUSbpGen_Qt177E3H1gEvrUYo7gT/exec";
-
-      if (!WEB_APP_URL || WEB_APP_URL.includes("https://script.google.com/macros/s/AKfycbxSUaMjaRTMQeomllikrG1egbxXCvaI6FwfYPsoDUSbpGen_Qt177E3H1gEvrUYo7gT/exec")) {
-        return;
-      }
-
-      const payload = JSON.stringify({
-        event: "YES_CLICK",
-        at: new Date().toISOString(),
-        page: location.href,
-        ua: navigator.userAgent,
-        note: "proposal yes"
-      });
-
-      // sendBeacon 우선 (이벤트 로그 용도에 더 적합)
-      if (navigator.sendBeacon) {
-        try {
-          const blob = new Blob([payload], { type: "application/json" });
-          navigator.sendBeacon(WEB_APP_URL, blob);
-          return;
-        } catch (e) {
-          // fallback to fetch
-        }
-      }
-
-      // fallback
-      fetch(WEB_APP_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: payload
-      }).catch(() => {});
-    }
-
-    // NO 버튼 직접 진입 시 즉시 강하게 회피
-    noBtn.addEventListener("touchstart", (e) => {
-      if (finished) return;
-      const touch = e.touches[0];
-      if (!touch) return;
-
-      e.preventDefault();
-      moveNoButtonFromPointer(touch.clientX, touch.clientY, true);
-    }, { passive: false });
-
-    noBtn.addEventListener("mouseenter", (e) => {
-      if (finished) return;
-      moveNoButtonFromPointer(e.clientX, e.clientY, true);
-    });
-
-    noBtn.addEventListener("pointerenter", (e) => {
-      if (finished) return;
-      moveNoButtonFromPointer(e.clientX, e.clientY, true);
-    });
-
-    noBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (finished) return;
-      moveNoButtonFromPointer(window.innerWidth / 2, window.innerHeight / 2, true);
-    });
-
-    // 모바일: 근처 터치하면 즉시 회피
+    // ☆ 이벤트 리스너 통합 관리
+    document.addEventListener("mousemove", moveNoButton);
     document.addEventListener("touchstart", (e) => {
-      if (finished) return;
-      const touch = e.touches[0];
-      if (!touch) return;
-
-      if (pointerNearNo(touch.clientX, touch.clientY, 115)) {
-        e.preventDefault();
-        moveNoButtonFromPointer(touch.clientX, touch.clientY, true);
-      }
+        // ☆ NO 버튼 근처 터치 시 도망가게 하되, YES 버튼 클릭은 방해 안함
+        if (e.target !== yesBtn) {
+            moveNoButton(e);
+        }
     }, { passive: false });
 
-    // 모바일: 손가락 누른 채 드래그하면 계속 일정 거리 유지하며 회피
-    document.addEventListener("touchmove", (e) => {
-      if (finished) return;
-      const touch = e.touches[0];
-      if (!touch) return;
-
-      if (pointerNearNo(touch.clientX, touch.clientY, 140)) {
+    // NO 버튼을 운좋게 눌렀을 때를 대비한 방어
+    noBtn.addEventListener("click", (e) => {
+      if (!finished) {
         e.preventDefault();
-        keepDistanceFromPointer(touch.clientX, touch.clientY);
+        moveNoButton(e);
       }
-    }, { passive: false });
-
-    // PC: 마우스 근처 오면 회피
-    document.addEventListener("mousemove", (e) => {
-      if (finished) return;
-
-      if (pointerNearNo(e.clientX, e.clientY, 100)) {
-        keepDistanceFromPointer(e.clientX, e.clientY);
-      }
-    });
-
-    // 리사이즈 시 화면 안쪽으로 보정
-    window.addEventListener("resize", () => {
-      if (finished || !isFloating) return;
-      setNoPosition(noX, noY);
     });
 
     yesBtn.addEventListener("click", () => {
       if (finished) return;
-
       finished = true;
 
-      // YES 클릭 로그 전송
-      sendYesLog();
-
-      result.textContent = "히히 ❤️";
+      result.textContent = "히히 고마워! ❤️";
       noBtn.style.display = "none";
-      yesBtn.disabled = true;
-      yesBtn.style.opacity = "0.9";
+      yesBtn.style.transform = "scale(1.2)";
+      
       createConfetti();
+      sendYesLog();
     });
 
     function createConfetti() {
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 70; i++) {
         const dot = document.createElement("div");
         dot.className = "confetti";
         dot.style.left = Math.random() * 100 + "vw";
-        dot.style.animationDuration = (2 + Math.random() * 2) + "s";
-        dot.style.width = dot.style.height = (6 + Math.random() * 6) + "px";
-        dot.style.background = `hsl(${Math.random() * 360}, 90%, 70%)`;
+        dot.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        dot.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
         document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 4000);
+      }
+    }
 
-        setTimeout(() => dot.remove(), 4500);
+    function sendYesLog() {
+      const URL = "https://script.google.com/macros/s/AKfycbxSUaMjaRTMQeomllikrG1egbxXCvaI6FwfYPsoDUSbpGen_Qt177E3H1gEvrUYo7gT/exec";
+      // 시트 연동을 포기하셨다고 해서 주소 검증 로직만 유지합니다.
+      if (URL.includes("macros/s/")) {
+        fetch(URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ event: "YES" }) });
       }
     }
   </script>
 </body>
 </html>
-
