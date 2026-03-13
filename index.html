@@ -400,6 +400,43 @@
       );
     }
 
+    function sendYesLog() {
+      const WEB_APP_URL = "여기에_본인_Apps_Script_Web_App_URL_붙여넣기";
+
+      if (!WEB_APP_URL || WEB_APP_URL.includes("여기에_본인_Apps_Script_Web_App_URL_붙여넣기")) {
+        return;
+      }
+
+      const payload = JSON.stringify({
+        event: "YES_CLICK",
+        at: new Date().toISOString(),
+        page: location.href,
+        ua: navigator.userAgent,
+        note: "proposal yes"
+      });
+
+      // sendBeacon 우선 (이벤트 로그 용도에 더 적합)
+      if (navigator.sendBeacon) {
+        try {
+          const blob = new Blob([payload], { type: "application/json" });
+          navigator.sendBeacon(WEB_APP_URL, blob);
+          return;
+        } catch (e) {
+          // fallback to fetch
+        }
+      }
+
+      // fallback
+      fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: payload
+      }).catch(() => {});
+    }
+
     // NO 버튼 직접 진입 시 즉시 강하게 회피
     noBtn.addEventListener("touchstart", (e) => {
       if (finished) return;
@@ -466,7 +503,13 @@
     });
 
     yesBtn.addEventListener("click", () => {
+      if (finished) return;
+
       finished = true;
+
+      // YES 클릭 로그 전송
+      sendYesLog();
+
       result.textContent = "히히 ❤️";
       noBtn.style.display = "none";
       yesBtn.disabled = true;
