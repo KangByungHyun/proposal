@@ -40,14 +40,11 @@
     .love { font-size: 24px; font-weight: 600; margin-bottom: 15px; }
     .question { font-size: 36px; font-weight: 800; margin-bottom: 60px; }
 
+    /* ☆ YES 버튼 위치 고정을 위한 영역 처리 */
     .buttons-area {
       position: relative;
       width: 100%;
       height: 80px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
     }
 
     .btn {
@@ -60,28 +57,29 @@
       font-weight: 700;
       cursor: pointer;
       user-select: none;
+      position: absolute; /* ☆ 두 버튼 모두 절대 좌표로 시작 */
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     #yesBtn {
       background: #111;
       color: #fff;
+      left: calc(50% - 145px); /* ☆ 화면 중앙 기준 왼쪽 고정 */
       z-index: 100;
-      /* ☆ YES 버튼은 위치 고정 */
-      position: relative; 
     }
 
     #noBtn {
       background: #fff;
       color: #111;
       border: 1.5px solid #ddd;
-      position: relative;
+      left: calc(50% + 15px); /* ☆ 화면 중앙 기준 오른쪽 고정 */
       z-index: 50;
-      transition: left 0.15s ease-out, top 0.15s ease-out;
+      transition: left 0.12s ease-out, top 0.12s ease-out; /* ☆ 자연스러운 움직임 */
     }
 
     #result { margin-top: 25px; font-size: 30px; font-weight: 700; color: #e11d48; }
 
-    /* ☆ 버전 표시 스타일 */
     .version {
       position: fixed;
       right: 15px;
@@ -113,7 +111,7 @@
     <div id="result"></div>
   </div>
 
-  <div class="version">v1.0</div>
+  <div class="version">v1.1</div>
 
   <script>
     const noBtn = document.getElementById("noBtn");
@@ -123,6 +121,7 @@
     let finished = false;
     let isFloating = false;
 
+    // ☆ NO 버튼이 움직이기 시작할 때만 fixed로 전환
     function makeFloating() {
       if (isFloating) return;
       const rect = noBtn.getBoundingClientRect();
@@ -130,6 +129,7 @@
       noBtn.style.left = rect.left + "px";
       noBtn.style.top = rect.top + "px";
       noBtn.style.margin = "0";
+      noBtn.style.transform = "none";
       isFloating = true;
     }
 
@@ -144,25 +144,24 @@
       const centerX = btnRect.left + btnW / 2;
       const centerY = btnRect.top + btnH / 2;
 
+      // 벡터 계산 (방향성)
       let dx = centerX - clientX;
       let dy = centerY - clientY;
       const dist = Math.sqrt(dx * dx + dy * dy) || 1;
 
-      const force = Math.max(120, 200 - dist); 
+      // ☆ 순간이동 없이 현재 위치에서 서서히 밀려나는 거리
+      const pushDist = 80; 
       
-      let targetX = btnRect.left + (dx / dist) * force;
-      let targetY = btnRect.top + (dy / dist) * force;
+      let targetX = btnRect.left + (dx / dist) * pushDist;
+      let targetY = btnRect.top + (dy / dist) * pushDist;
 
-      const margin = 30;
+      const pad = 20;
       const screenW = window.innerWidth;
       const screenH = window.innerHeight;
 
-      // 모서리 탈출 로직
-      if (targetX < margin || targetX > screenW - btnW - margin || 
-          targetY < margin || targetY > screenH - btnH - margin) {
-        targetX = clientX > screenW / 2 ? margin : screenW - btnW - margin;
-        targetY = clientY > screenH / 2 ? margin : screenH - btnH - margin;
-      }
+      // ☆ 벽을 뚫고 나가지 못하게 제한 (미끄러짐 효과)
+      targetX = Math.max(pad, Math.min(screenW - btnW - pad, targetX));
+      targetY = Math.max(pad, Math.min(screenH - btnH - pad, targetY));
 
       noBtn.style.left = targetX + "px";
       noBtn.style.top = targetY + "px";
@@ -170,13 +169,14 @@
 
     function checkEvade(ex, ey) {
       const rect = noBtn.getBoundingClientRect();
-      const buffer = 80;
+      const buffer = 70; // 감지 범위
       if (ex >= rect.left - buffer && ex <= rect.right + buffer &&
           ey >= rect.top - buffer && ey <= rect.bottom + buffer) {
         moveNoButton(ex, ey);
       }
     }
 
+    // 마우스/터치 리스너
     document.addEventListener("mousemove", (e) => checkEvade(e.clientX, e.clientY));
 
     document.addEventListener("touchstart", (e) => {
@@ -189,14 +189,15 @@
       if (finished) return;
       const touch = e.touches[0];
       const rect = noBtn.getBoundingClientRect();
-      // 드래그 추적 감도 강화
-      if (touch.clientX >= rect.left - 100 && touch.clientX <= rect.right + 100 &&
-          touch.clientY >= rect.top - 100 && touch.clientY <= rect.bottom + 100) {
+      // ☆ 드래그 중에도 자연스럽게 따라오며 피함
+      if (touch.clientX >= rect.left - 120 && touch.clientX <= rect.right + 120 &&
+          touch.clientY >= rect.top - 120 && touch.clientY <= rect.bottom + 120) {
         e.preventDefault();
         moveNoButton(touch.clientX, touch.clientY);
       }
     }, { passive: false });
 
+    // 실수 클릭 방어
     noBtn.addEventListener("click", (e) => {
       e.preventDefault();
       moveNoButton(window.innerWidth / 2, window.innerHeight / 2);
