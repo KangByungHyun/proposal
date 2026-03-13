@@ -2,110 +2,181 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+  />
   <title>나랑 결혼 해줘!</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --card-max-width: 720px;
+      --card-radius: 28px;
+      --pink: #ff4f87;
+      --pink-dark: #ff3f7a;
+      --text: #333;
+      --muted: #666;
+      --subtle: #999;
+      --white: rgba(255, 255, 255, 0.92);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-top: env(safe-area-inset-top, 0px);
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.5), transparent 28%),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.35), transparent 24%),
+        linear-gradient(135deg, #fff0f6, #ffe4ec, #fff8fb);
+    }
 
     body {
-      margin: 0;
-      overflow: hidden;
-      font-family: "Malgun Gothic", Arial, sans-serif;
-      background: linear-gradient(135deg, #fff0f6, #ffe4ec, #fff8fb);
-      height: 100vh;
+      min-height: 100vh;   /* fallback */
+      min-height: 100dvh;  /* 모바일 주소창 대응 */
       display: flex;
-      justify-content: center;
       align-items: center;
-      color: #333;
+      justify-content: center;
+      padding:
+        max(16px, var(--safe-top))
+        16px
+        max(20px, calc(16px + var(--safe-bottom)))
+        16px;
+      position: relative;
     }
 
     .card {
-      width: min(90vw, 700px);
-      min-height: 420px;
-      background: rgba(255,255,255,0.92);
-      border-radius: 28px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
-      padding: 40px 30px;
+      width: min(100%, var(--card-max-width));
+      max-height: calc(100dvh - 32px - var(--safe-top) - var(--safe-bottom));
+      overflow: auto;
+      background: var(--white);
+      border-radius: var(--card-radius);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+      padding: clamp(22px, 4vw, 40px) clamp(18px, 4vw, 32px);
       text-align: center;
       position: relative;
       backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .heart {
-      font-size: 56px;
-      margin-bottom: 10px;
+      font-size: clamp(40px, 9vw, 56px);
+      margin-bottom: 8px;
       animation: pulse 1.2s infinite;
+      line-height: 1;
     }
 
     @keyframes pulse {
-      0%,100% { transform: scale(1); }
+      0%, 100% { transform: scale(1); }
       50% { transform: scale(1.12); }
     }
 
     h1 {
-      margin: 10px 0 18px;
-      font-size: 42px;
-      color: #ff3f7a;
+      margin: 10px 0 16px;
+      font-size: clamp(28px, 7vw, 42px);
+      line-height: 1.25;
+      color: var(--pink-dark);
+      word-break: keep-all;
     }
 
     p {
       margin: 0 auto;
-      max-width: 520px;
-      font-size: 18px;
-      line-height: 1.8;
+      max-width: 540px;
+      font-size: clamp(15px, 4vw, 18px);
+      line-height: 1.75;
       color: #555;
+      word-break: keep-all;
     }
 
     .buttons-area {
-      margin-top: 45px;
+      margin-top: clamp(28px, 6vw, 42px);
       position: relative;
-      height: 180px;
+      min-height: 180px;
+      height: clamp(180px, 28vh, 240px);
+      overflow: hidden;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    /* 초기 상태: 모바일/데스크톱 모두 자연스럽게 보이도록 flex */
+    .buttons-row {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 16px;
+      pointer-events: none; /* 내부 버튼만 클릭 */
     }
 
     .btn {
       border: none;
       border-radius: 999px;
-      padding: 16px 34px;
-      font-size: 20px;
-      font-weight: bold;
+      min-width: 110px;
+      min-height: 52px;
+      padding: 14px 24px;
+      font-size: clamp(16px, 4.2vw, 20px);
+      font-weight: 700;
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      position: absolute;
       user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+      position: relative;
+      pointer-events: auto;
+      z-index: 2;
     }
 
-    .btn:hover {
-      transform: scale(1.05);
+    .btn:active {
+      transform: scale(0.97);
     }
 
     #yesBtn {
-      left: 32%;
-      top: 60px;
-      background: #ff4f87;
+      background: var(--pink);
       color: #fff;
-      box-shadow: 0 10px 20px rgba(255,79,135,0.35);
+      box-shadow: 0 10px 20px rgba(255, 79, 135, 0.35);
     }
 
     #noBtn {
-      left: 56%;
-      top: 60px;
-      background: #f1f1f1;
-      color: #666;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      background: #f3f3f3;
+      color: var(--muted);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* 회피 시작 후 absolute 전환 */
+    #noBtn.floating {
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin: 0;
     }
 
     #result {
-      margin-top: 20px;
-      font-size: 26px;
-      font-weight: bold;
-      color: #ff3f7a;
+      margin-top: 18px;
+      font-size: clamp(20px, 5.2vw, 28px);
+      font-weight: 800;
+      color: var(--pink-dark);
       min-height: 40px;
+      line-height: 1.5;
+      word-break: keep-all;
     }
 
     .small {
       margin-top: 12px;
-      font-size: 13px;
-      color: #999;
+      font-size: clamp(12px, 3.3vw, 13px);
+      color: var(--subtle);
+      word-break: keep-all;
     }
 
     .confetti {
@@ -116,12 +187,47 @@
       border-radius: 50%;
       animation: fall linear forwards;
       opacity: 0.9;
+      z-index: 9999;
+      pointer-events: none;
     }
 
     @keyframes fall {
       to {
-        transform: translateY(110vh) rotate(720deg);
+        transform: translateY(110dvh) rotate(720deg);
         opacity: 0.2;
+      }
+    }
+
+    .footer-note {
+      margin-top: 8px;
+      font-size: clamp(11px, 3vw, 12px);
+      color: #b5a1aa;
+    }
+
+    @media (max-width: 420px) {
+      .card {
+        border-radius: 22px;
+      }
+
+      .buttons-area {
+        min-height: 170px;
+      }
+
+      .btn {
+        min-width: 96px;
+        min-height: 50px;
+        padding: 12px 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .heart,
+      .confetti {
+        animation: none !important;
+      }
+
+      .btn {
+        transition: none !important;
       }
     }
   </style>
@@ -130,6 +236,7 @@
   <div class="card" id="card">
     <div class="heart">💖</div>
     <h1>나랑 결혼 해줘!</h1>
+
     <p>
       너와 함께한 하루하루가 너무 소중했고,<br />
       앞으로의 모든 날도 너와 함께하고 싶어.<br /><br />
@@ -137,12 +244,15 @@
     </p>
 
     <div class="buttons-area" id="playground">
-      <button class="btn" id="yesBtn">YES 💍</button>
-      <button class="btn" id="noBtn">NO 🙈</button>
+      <div class="buttons-row" id="buttonsRow">
+        <button class="btn" id="yesBtn" type="button">YES 💍</button>
+        <button class="btn" id="noBtn" type="button">NO 🙈</button>
+      </div>
     </div>
 
     <div id="result"></div>
     <div class="small">※ 힌트: 정답은 YES야 😏</div>
+    <div class="footer-note">모바일에서도 NO는 쉽지 않을 거야 😎</div>
   </div>
 
   <script>
@@ -150,62 +260,177 @@
     const yesBtn = document.getElementById("yesBtn");
     const result = document.getElementById("result");
     const playground = document.getElementById("playground");
+    const buttonsRow = document.getElementById("buttonsRow");
 
-    function moveNoButton() {
+    let noFloating = false;
+    let isAccepted = false;
+    let moveLock = false;
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function makeNoFloatingIfNeeded() {
+      if (noFloating) return;
+
+      const areaRect = playground.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+
+      // 현재 보이는 위치를 playground 기준 좌표로 환산
+      const left = noRect.left - areaRect.left;
+      const top = noRect.top - areaRect.top;
+
+      noBtn.classList.add("floating");
+      noBtn.style.left = `${left}px`;
+      noBtn.style.top = `${top}px`;
+
+      noFloating = true;
+    }
+
+    function moveNoButton(force = false) {
+      if (isAccepted) return;
+      if (moveLock && !force) return;
+
+      moveLock = true;
+      setTimeout(() => {
+        moveLock = false;
+      }, 120);
+
+      makeNoFloatingIfNeeded();
+
       const areaRect = playground.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
 
-      const maxX = areaRect.width - btnRect.width;
-      const maxY = areaRect.height - btnRect.height;
+      const maxX = Math.max(0, areaRect.width - btnRect.width - 8);
+      const maxY = Math.max(0, areaRect.height - btnRect.height - 8);
 
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      // 너무 가장자리 붙지 않도록 패딩
+      const pad = 8;
+
+      const x = clamp(Math.random() * maxX, pad, Math.max(pad, maxX));
+      const y = clamp(Math.random() * maxY, pad, Math.max(pad, maxY));
 
       noBtn.style.left = `${x}px`;
       noBtn.style.top = `${y}px`;
     }
 
-    // 마우스가 가까이 오면 도망
-    document.addEventListener("mousemove", (e) => {
+    function getDistanceToNoButton(clientX, clientY) {
       const rect = noBtn.getBoundingClientRect();
-      const btnCenterX = rect.left + rect.width / 2;
-      const btnCenterY = rect.top + rect.height / 2;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-      const dx = e.clientX - btnCenterX;
-      const dy = e.clientY - btnCenterY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      const dx = clientX - centerX;
+      const dy = clientY - centerY;
 
-      if (distance < 120) {
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // 데스크톱/펜/일부 모바일 포인터 환경 대응
+    document.addEventListener("pointermove", (e) => {
+      if (isAccepted) return;
+
+      // coarse pointer(대부분 모바일 손가락)는 pointermove가 불안정할 수 있으므로
+      // 너무 민감하게 반응시키지 않음
+      const isTouchLike = e.pointerType === "touch";
+      const threshold = isTouchLike ? 70 : 120;
+
+      const distance = getDistanceToNoButton(e.clientX, e.clientY);
+      if (distance < threshold) {
         moveNoButton();
       }
+    }, { passive: true });
+
+    // 모바일 핵심: 터치 시작 지점이 NO 근처면 바로 회피
+    document.addEventListener("touchstart", (e) => {
+      if (isAccepted) return;
+      if (!e.touches || e.touches.length === 0) return;
+
+      const touch = e.touches[0];
+      const distance = getDistanceToNoButton(touch.clientX, touch.clientY);
+
+      if (distance < 90) {
+        moveNoButton(true);
+      }
+    }, { passive: true });
+
+    // 버튼 자체에 접근 시 즉시 회피 (모바일/웹뷰 핵심)
+    noBtn.addEventListener("pointerdown", (e) => {
+      if (isAccepted) return;
+      e.preventDefault();
+      moveNoButton(true);
     });
 
-    // 혹시 터치/우연 클릭 방지
-    noBtn.addEventListener("mouseenter", moveNoButton);
-    noBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      moveNoButton();
+    noBtn.addEventListener("mouseenter", () => {
+      if (isAccepted) return;
+      moveNoButton(true);
     });
+
+    noBtn.addEventListener("click", (e) => {
+      if (isAccepted) return;
+      e.preventDefault();
+      moveNoButton(true);
+    });
+
+    // 모바일 회전/리사이즈 시 버튼이 영역 밖으로 나가지 않도록 보정
+    function normalizeNoButtonPosition() {
+      if (!noFloating || isAccepted) return;
+
+      const areaRect = playground.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const currentLeft = parseFloat(noBtn.style.left || "0");
+      const currentTop = parseFloat(noBtn.style.top || "0");
+
+      const maxX = Math.max(0, areaRect.width - btnRect.width - 8);
+      const maxY = Math.max(0, areaRect.height - btnRect.height - 8);
+
+      noBtn.style.left = `${clamp(currentLeft, 8, Math.max(8, maxX))}px`;
+      noBtn.style.top = `${clamp(currentTop, 8, Math.max(8, maxY))}px`;
+    }
+
+    window.addEventListener("resize", normalizeNoButtonPosition);
+
+    // iOS Safari / 일부 웹뷰에서 viewport 높이 보정용
+    function setAppHeight() {
+      document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
+    }
+    setAppHeight();
+    window.addEventListener("resize", setAppHeight);
 
     yesBtn.addEventListener("click", () => {
+      if (isAccepted) return;
+
+      isAccepted = true;
+
       result.innerHTML = "고마워... ❤️ 이제 진짜 평생 같이하자 💍";
       yesBtn.disabled = true;
-      yesBtn.style.opacity = "0.85";
+      yesBtn.style.opacity = "0.88";
+      yesBtn.textContent = "YES 💖";
       noBtn.style.display = "none";
+
       createConfetti();
     });
 
     function createConfetti() {
-      for (let i = 0; i < 80; i++) {
+      const count = window.innerWidth < 480 ? 42 : 72;
+
+      for (let i = 0; i < count; i++) {
         const dot = document.createElement("div");
         dot.className = "confetti";
-        dot.style.left = Math.random() * 100 + "vw";
-        dot.style.animationDuration = (2 + Math.random() * 3) + "s";
-        dot.style.width = dot.style.height = (6 + Math.random() * 10) + "px";
-        dot.style.background = `hsl(${Math.random() * 360}, 90%, 70%)`;
-        document.body.appendChild(dot);
 
-        setTimeout(() => dot.remove(), 5500);
+        dot.style.left = Math.random() * 100 + "vw";
+        dot.style.animationDuration = (2.2 + Math.random() * 2.2) + "s";
+
+        const size = window.innerWidth < 480
+          ? (5 + Math.random() * 7)
+          : (6 + Math.random() * 10);
+
+        dot.style.width = `${size}px`;
+        dot.style.height = `${size}px`;
+        dot.style.background = `hsl(${Math.random() * 360}, 90%, 72%)`;
+
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 5000);
       }
     }
   </script>
